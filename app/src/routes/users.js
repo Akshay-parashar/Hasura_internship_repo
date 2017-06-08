@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var rp = require('request-promise');
 
 
 /* GET users listing. */
@@ -39,30 +40,39 @@ router.post('/register',function(req,res,next){
      else {
           console.log("no errors :)");
           //Send an api call to hasura auth and then redirect
-          var xhr = new XMLHttpRequest();
-          var url = "http://auth.testapp.vcap.me/signup";
-          xhr.open("POST",url,true);
-          xhr.setRequestHeader("Content-type","application/json");
-          xhr.onreadystatechange = function(){
-            if(xhr.readyState == 4 && xhr.status == 200){
-              var json = JSON.parse(xhr.responseText);
-              console.log("This is the response from server" + JSON.stringify(json));
-              //alert(JSON.stringify(json.message));
-            }
-            else if(xhr.readyState ==4){
-              var json = JSON.parse(xhr.responseText);
-              console.log("Consoled Error : "+JSON.stringify(json.message));
-            }
-          }
-          var data = {};
-          data["username"] = username;
-          data["email"] = email;
-          data["password"] = password;
-          console.log(JSON.stringify(data));
-          var payload = JSON.stringify(data);
-          console.log(data);
-          console.log(jsoninsert);
-          xhr.send(jsoninsert);
+          var options = {
+              method: 'POST',
+              uri: "http://auth.vcap.me/signup",
+              body: {
+                  username : username,
+                  email : email,
+                  password: password
+              },
+              json: true // Automatically stringifies the body to JSON
+            };
+
+          rp(options)
+              .then(function (parsedBody) {
+                  // POST succeeded...
+                  console.log(parsedBody);
+                  res.send(parsedBody);
+              })
+              .catch(function (err) {
+                  // POST failed...
+                  console.log(err);
+              });
+
+              // rp('http://www.google.com')
+              // .then(function (htmlString) {
+              //     // Process html...
+              //     console.log("rp success");
+              //     console.log(htmlString);
+              // })
+              // .catch(function (err) {
+              //     // Crawling failed...
+              //     console.log("rp sucks");
+              //     console.log(err);
+              // });
 
        }
    });
