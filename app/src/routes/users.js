@@ -53,12 +53,11 @@ router.post('/register',function(req,res,next){
 
           rp(options)
               .then(function (parsedBody) {
-                  // POST succeeded...
-                  console.log(parsedBody);
-                  res.send(parsedBody);
+                  // User account created proceed with further actions
+
               })
               .catch(function (err) {
-                  // POST failed...
+                  // User account cannot be created due to some errors
                   console.log(err);
               });
 
