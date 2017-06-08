@@ -40,7 +40,7 @@ router.post('/register',function(req,res,next){
      else {
           console.log("no errors :)");
           //Send an api call to hasura auth and then redirect
-          var options = {
+          /*var options = {
               method: 'POST',
               uri: "http://auth.vcap.me/signup",
               body: {
@@ -59,19 +59,12 @@ router.post('/register',function(req,res,next){
               .catch(function (err) {
                   // User account cannot be created due to some errors
                   console.log(err);
-              });
+              });*/
 
-              // rp('http://www.google.com')
-              // .then(function (htmlString) {
-              //     // Process html...
-              //     console.log("rp success");
-              //     console.log(htmlString);
-              // })
-              // .catch(function (err) {
-              //     // Crawling failed...
-              //     console.log("rp sucks");
-              //     console.log(err);
-              // });
+              //Todo::  Add the name of user with the hasura_id which you will get from the response of above
+              //        request and add it to your application table  
+
+            res.redirect('../user_home');
 
        }
    });

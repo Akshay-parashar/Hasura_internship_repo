@@ -8,6 +8,7 @@ var hbs = require('hbs');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var user_home = require('./routes/user_home');
 
 var app = express();
 hbs.localsAsTemplateData(app);
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //routes
 app.use('/', index);
 app.use('/users', users);
+app.use('/user_home',user_home);
 
 
 
