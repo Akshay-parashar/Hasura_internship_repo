@@ -13,8 +13,9 @@
          <ul class="nav navbar-nav">
            <li class="{{#if active_home}}active{{/if}}"><a href="/">Home</a></li>
            <li class="{{#if active_about}}active{{/if}}"><a href="#about">About</a></li>
-           <li class="{{#if active_login}}active{{/if}}"><a href="/users/login">Login</a></li>
-           <li class="{{#if active_register}}active{{/if}}"><a href="/users/register">Register</a></li>
+           <li class="{{#if active_login}}active{{/if}}{{#if logged_in}}hide_link{{/if}}"><a href="/users/login">Login</a></li>
+           <li class="{{#if active_register}}active{{/if}}{{#if logged_in}}hide_link{{/if}}"><a href="/users/register">Register</a></li>
+           <li class="hide_link {{#if logged_in}}show_link{{/if}}"><a href="/">Logout</a></li>
          </ul>
        </div><!--/.nav-collapse -->
      </div>

@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send("Hello User, welcome to user_home page");
+  //res.send("Hello User, welcome to user_home page");
+  res.render('dashboard',{logged_in: true});
 });
 
 router.get('/dashboard', function(req, res, next) {

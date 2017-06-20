@@ -40,9 +40,9 @@ router.post('/register',function(req,res,next){
      else {
           console.log("no errors :)");
           //Send an api call to hasura auth and then redirect
-          /*var options = {
+          var signup = {
               method: 'POST',
-              uri: "http://auth.vcap.me/signup",
+              uri: "http://auth.c100.hasura.me/signup",
               body: {
                   username : username,
                   email : email,
@@ -51,20 +51,52 @@ router.post('/register',function(req,res,next){
               json: true // Automatically stringifies the body to JSON
             };
 
-          rp(options)
-              .then(function (parsedBody) {
+          rp(signup)
+              .then(function (response) {
                   // User account created proceed with further actions
+                  //var data = JSON.parse(response.trim());
+                  var user_id = response.hasura_id;
+                  var user_token = "Bearer " + response.auth_token;
+                  console.log(response,user_id);
+
+                  //Register this user in app_user table
+                  var reg_app_user = {
+                      method: 'POST',
+                      uri:"http://data.c100.hasura.me/v1/query",
+                      headers: {
+                        "Authorization": user_token
+                      },
+                      body: {
+                          type: "insert",
+                          args: {
+                            table: "app_user",
+                            objects: [
+                                {
+                                  id: user_id,
+                                  name: name
+                                }
+                            ]
+                          }
+                      },
+                      json: true
+                  };
+
+                  rp(reg_app_user).then(function(response){
+                    //Take the user to their dashboard after sign up
+                      res.redirect('../user_home');
+                  })
+                  .catch(function(err){
+                    //User cannot be registered in app_user table due to some errors
+                    console.log("succesfully signed up but error in storing info in app_user");
+                    console.log(err);
+                  });
 
               })
               .catch(function (err) {
+                  console.log("resolve this error");
                   // User account cannot be created due to some errors
                   console.log(err);
-              });*/
-
-              //Todo::  Add the name of user with the hasura_id which you will get from the response of above
-              //        request and add it to your application table  
-
-            res.redirect('../user_home');
+              });
 
        }
    });
