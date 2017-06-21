@@ -68,5 +68,7 @@ $(document).ready(function(){
     }
   });
 
+  //Handle User Logout
+
 
 });

@@ -11,11 +11,11 @@
        </div>
        <div id="navbar" class="collapse navbar-collapse">
          <ul class="nav navbar-nav">
-           <li class="{{#if active_home}}active{{/if}}"><a href="/">Home</a></li>
+           {{#if logged_in}}<li class="{{#if active_home}}active{{/if}}"><a href="/user_home">Home</a></li>{{/if}}
            <li class="{{#if active_about}}active{{/if}}"><a href="#about">About</a></li>
            <li class="{{#if active_login}}active{{/if}}{{#if logged_in}}hide_link{{/if}}"><a href="/users/login">Login</a></li>
            <li class="{{#if active_register}}active{{/if}}{{#if logged_in}}hide_link{{/if}}"><a href="/users/register">Register</a></li>
-           <li class="hide_link {{#if logged_in}}show_link{{/if}}"><a href="/">Logout</a></li>
+           <li class="hide_link {{#if logged_in}}show_link{{/if}}"><a href="/user_home/logout" id="logout_btn">Logout</a></li>
          </ul>
        </div><!--/.nav-collapse -->
      </div>

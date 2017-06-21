@@ -16,6 +16,33 @@ router.get('/register',function(req,res,next) {
   res.render('register',{active_register: true});
 });
 
+router.post('/login',function(req,res,next) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  var login = {
+      method: 'POST',
+      uri: "http://auth.c100.hasura.me/login",
+      body: {
+          username : username,
+          password: password
+      },
+      json: true // Automatically stringifies the body to JSON
+    };
+
+  rp(login).then(function (response) {
+      //login successfull
+      console.log(response);
+      res.redirect('../user_home');
+  })
+  .catch(function (err) {
+    //login not successfull
+      console.log(err);
+
+  });
+
+});
+
 router.post('/register',function(req,res,next){
   var name = req.body.name;
   var username = req.body.user_name;
@@ -97,7 +124,6 @@ router.post('/register',function(req,res,next){
                   // User account cannot be created due to some errors
                   console.log(err);
               });
-
        }
    });
 
