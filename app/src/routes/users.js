@@ -23,6 +23,7 @@ router.post('/login',function(req,res,next) {
   var login = {
       method: 'POST',
       uri: "http://auth.c100.hasura.me/login",
+      //resolveWithFullResponse: true,
       body: {
           username : username,
           password: password
@@ -33,7 +34,10 @@ router.post('/login',function(req,res,next) {
   rp(login).then(function (response) {
       //login successfull
       console.log(response);
+      var user_token = "Bearer " + response.auth_token;
+      res.cookie("Authorization" , user_token);
       res.redirect('../user_home');
+      //res.render('dashboard',{logged_in: true, active_home: true});
   })
   .catch(function (err) {
     //login not successfull
@@ -109,8 +113,9 @@ router.post('/register',function(req,res,next){
                   };
 
                   rp(reg_app_user).then(function(response){
-                    //Take the user to their dashboard after sign up
+                    //Set the cookie and take the user to their dashboard after sign up
                       res.redirect('../user_home');
+
                   })
                   .catch(function(err){
                     //User cannot be registered in app_user table due to some errors
