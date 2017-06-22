@@ -76,6 +76,45 @@ a {
   border-top-right-radius: 0;
 }
 
+.section_profile_info {
+  margin-bottom: 40px;
+  border: 2px solid black;
+  margin-top: 40px;
+}
+
+.user_info {
+  border: 2px solid red;
+}
+
+.user_stats {
+  border: 2px solid blue;
+}
+
+.mid {
+  margin: 20px auto;
+  border: 2px solid green;
+}
+
+.search_btn {
+  background: #15A589;
+}
+
+.profile_img {
+  border-radius: 50%;
+}
+
+
+.port-image
+{
+    width: 100%;
+}
+
+.gallery_product
+{
+    margin-bottom: 30px;
+}
+
+
 /*=========================
   Media Queries
 ===========================*/
