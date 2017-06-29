@@ -49,7 +49,10 @@ router.post('/login',function(req,res,next) {
   rp(login).then(function (response) {
       //login successfull
       console.log(response);
+      var user_id = response.hasura_id;
       var user_token = "Bearer " + response.auth_token;
+      res.cookie("userId", user_id);
+      res.cookie("userName",username);
       res.cookie("Authorization" , user_token);
       res.redirect('../user_home');
       //res.render('dashboard',{logged_in: true, active_home: true});
@@ -104,6 +107,8 @@ router.post('/register',function(req,res,next){
                   var user_id = response.hasura_id;
                   var user_token = "Bearer " + response.auth_token;
                   res.cookie("Authorization" , user_token);
+                  res.cookie("userName",username);
+                  res.cookie("userId",user_id);
                   console.log(response,user_id);
 
                   //Register this user in app_user table

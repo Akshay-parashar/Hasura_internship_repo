@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/profile',function(req,res) {
+    //console.log("This is your userId: " + req. )
   //Role based access on the view
   checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
     if(identity == "anon user" || identity == "user token expired") {
@@ -26,10 +27,44 @@ router.get('/profile',function(req,res) {
     }
     else if(identity == "authenticated user") {
       //Make the necessary request to get the data
+      var profile_data_req = {
+          method: 'POST',
+          uri:"http://data.c100.hasura.me/v1/query",
+          headers: {
+            "Authorization": req.cookies.Authorization
+          },
+          body: {
+            type: "select",
+            args: {
+              table: "app_user",
+              columns: [
+                "id","name",
+                {
+                    name: "photos",
+                    columns: ["caption","content"]
+                }
+              ],
+              where: {id: req.cookies.userId }
+            }
+          },
+          json: true
+      };
+
+      rp(profile_data_req).then(function (response){
+        console.log("succesfully retrieved some user data");
+        console.log(response);
+        console.log(response[0].id);
+        console.log(response[0].name);
+        console.log(response[0].photos);
+      })
+      .catch(function(err){
+        console.log("There was some error retrieving user data");
+        console.log(err);
+      });
+
         res.render('profile',{logged_in: true, active_profile: true});
     }
   });
-
 
 })
 
@@ -53,6 +88,8 @@ router.get('/logout',function(req,res,next){
     //succesfully logged out user
     console.log(response);
     res.clearCookie("Authorization");
+    res.clearCookie("userId");
+    res.clearCookie("userName");
     //redirect to home page of application
     res.redirect('../');
   })

@@ -74,5 +74,7 @@ $(document).ready(function(){
   return v.toString(16);
   }));
 
+  console.log(guid());
+
 
 });
