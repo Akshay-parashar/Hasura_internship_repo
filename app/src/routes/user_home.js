@@ -6,7 +6,6 @@ var rp = require('request-promise');
 router.get('/', function(req, res, next) {
   console.log(req.cookies);
   console.log(req.cookies.Authorization);
-  //res.send("Hello User, welcome to user_home page");
   checkUserIdentity(req.cookies.Authorization,"user_home ",function(identity){
     if(identity == "anon user" || identity == "user token expired") {
         res.redirect('../');
@@ -19,7 +18,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/profile',function(req,res) {
-    //console.log("This is your userId: " + req. )
   //Role based access on the view
   checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
     if(identity == "anon user" || identity == "user token expired") {
@@ -27,7 +25,10 @@ router.get('/profile',function(req,res) {
     }
     else if(identity == "authenticated user") {
       //Make the necessary request to get the data
-      var profile_data_req = {
+      var data_user_stats;
+      var data_user_images = [];
+
+      var user_stats_req = {
           method: 'POST',
           uri:"http://data.c100.hasura.me/v1/query",
           headers: {
@@ -36,26 +37,54 @@ router.get('/profile',function(req,res) {
           body: {
             type: "select",
             args: {
-              table: "app_user",
-              columns: [
-                "id","name",
-                {
-                    name: "photos",
-                    columns: ["caption","content"]
-                }
-              ],
+              table: "user_stats",
+              columns: ["*"],
               where: {id: req.cookies.userId }
             }
           },
           json: true
       };
 
-      rp(profile_data_req).then(function (response){
+      var user_images_req = {
+          method: 'POST',
+          uri:"http://data.c100.hasura.me/v1/query",
+          headers: {
+            "Authorization": req.cookies.Authorization
+          },
+          body: {
+            type: "select",
+            args: {
+              table: "photo",
+              columns: ["*"],
+              where: {poster_id: req.cookies.userId }
+            }
+          },
+          json: true
+      };
+
+
+
+      rp(user_stats_req).then(function (response){
         console.log("succesfully retrieved some user data");
-        console.log(response);
-        console.log(response[0].id);
+        console.log(response[0]);
+        data_user_stats = response[0];
+        /*console.log(response[0].id);
         console.log(response[0].name);
-        console.log(response[0].photos);
+        console.log(response[0].photos);*/
+        rp(user_images_req).then(function (response){
+          console.log("succesfully retrieved user images");
+          response.forEach( function (image){
+          data_user_images.push(image.content);
+          });
+          console.log("---------------");
+          console.log(data_user_images);
+
+        })
+        .catch(function(err){
+          console.log("There was some error retrieving user images");
+          console.log(err);
+        });
+
       })
       .catch(function(err){
         console.log("There was some error retrieving user data");

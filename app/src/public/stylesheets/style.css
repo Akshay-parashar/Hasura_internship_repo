@@ -99,6 +99,10 @@ a {
   background: #15A589;
 }
 
+.padding{
+  padding: 10px 50px 50px 50px;
+}
+
 .profile_img {
   border-radius: 50%;
 }
