@@ -25,10 +25,11 @@ router.get('/profile',function(req,res) {
         res.redirect('../');
     }
     else if(identity == "authenticated user") {
+      //Make the necessary request to get the data
         res.render('profile',{logged_in: true, active_profile: true});
     }
   });
-  //res.render('profile',{active_profile: true});
+
 
 })
 

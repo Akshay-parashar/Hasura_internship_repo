@@ -28,7 +28,7 @@ router.get('/register',function(req,res,next) {
         res.redirect('../user_home');
     }
   });
-
+  //res.render('register',{active_register: true});
 });
 
 router.post('/login',function(req,res,next) {
@@ -103,6 +103,7 @@ router.post('/register',function(req,res,next){
                   //var data = JSON.parse(response.trim());
                   var user_id = response.hasura_id;
                   var user_token = "Bearer " + response.auth_token;
+                  res.cookie("Authorization" , user_token);
                   console.log(response,user_id);
 
                   //Register this user in app_user table
