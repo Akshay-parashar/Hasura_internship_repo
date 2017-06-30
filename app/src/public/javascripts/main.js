@@ -68,6 +68,43 @@ $(document).ready(function(){
     }
   });
 
+  //profile section user posts image modal
+  $('img').on('click', function (ce) {
+       var image = $(this).attr('src');
+       var likes = $(this).data('likes');
+       var photo_id = $(this).data('photoid');
+       if(!likes){ //to check if the image has 0 likes
+         likes = 0;
+       }
+      
+       $("#like_btn").on('click',function(e){
+         //var curr_like = $(this)
+         console.log(likes);
+         //$("#like_badge").html(likes+1);
+         //e.stopPropagation();
+         /*$.ajax({
+            type: "POST",
+            url: "http://data.c100.hasura.me/v1/query",
+            cache: false,
+            crossDomain: true,
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (data) {
+                alert(data);
+          });*/
+       });
+
+       $('#myModal').on('show.bs.modal', function () {
+           $(".modal_img").attr("src", image);
+           $("#like_badge").html(likes);
+       });
+
+   });
+
+
+
   //Handle File upload
   const guid = () => ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
   var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);

@@ -103,6 +103,10 @@ a {
   padding: 10px 50px 50px 50px;
 }
 
+.hide {
+  display: none;
+}
+
 .profile_img {
   border-radius: 50%;
 }
@@ -113,9 +117,13 @@ a {
     width: 100%;
 }
 
-.gallery_product
+.user_post
 {
     margin-bottom: 30px;
+}
+
+.user_post:hover{
+  cursor: pointer;
 }
 
 

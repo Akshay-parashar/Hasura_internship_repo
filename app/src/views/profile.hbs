@@ -9,7 +9,7 @@
         <div class="col-lg-9 col-md-9 mid">
           <div class="row">
             <div class="col-md-12 col-lg-12">
-              <h3>Username</h3>
+              <h3>{{user_stats.username}}</h3>
             </div>
             <div class="col-md-12 col-lg-12">
               <h3>Description</h3>
@@ -33,13 +33,13 @@
     <div class="user_stats container-fluid">
       <div class="row">
         <div class="col-lg-4 col-md-4">
-          <h3>Posts:</h3>
+          <h3>Posts: {{user_stats.user_posts}} <span class="{{#if user_stats.user_posts}}hide{{/if}}"> 0</span></h3>
         </div>
         <div class="col-lg-4 col-md-4">
-          <h3>Followers:</h3>
+          <h3>Followers: {{user_stats.user_followers}} <span class="{{#if user_stats.user_followers}}hide{{/if}}"> 0</span></h3>
         </div>
         <div class="col-lg-4 col-md-4">
-          <h3>Following:</h3>
+          <h3>Following: {{user_stats.user_following}} <span class="{{#if user_stats.user_following}}hide{{/if}}"> 0</span></h3>
         </div>
       </div>
     </div>
@@ -49,25 +49,34 @@
   <div class="section_profile_photos">
     <div class="row">
 
-      <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-          <img src="http://filestore.c100.hasura.me/v1/file/e0dc9972-2058-4c52-9d32-ca6d449d3a8a" class="img-responsive">
+      {{#if images}}
+        {{#each images}}
+          <div class="user_post col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
+              <img src="http://filestore.c100.hasura.me/v1/file/{{this.content}}" class="img-responsive"
+              data-toggle="modal" data-target="#myModal" data-photoid={{this.id}} data-likes={{this.no_likes}} >
+          </div>
+        {{/each}}
+      {{/if}}
+
+      <div class="col-md-12 col-lg-12 default_container {{#if images}}hide{{/if}}">
+        <h1 class="text-center">Welcome User,No Post to show yet</h1>
       </div>
 
-      <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter sprinkle">
-          <img src="http://filestore.c100.hasura.me/v1/file/80c616b2-7181-4e1d-a3d2-da266e053a94" class="img-responsive">
+      <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img class="img-responsive modal_img" src=""/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Close</button>
+                    <button type="button" class="btn btn-success" id="like_btn"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Like  <span id="like_badge"></span></button>
+                </div>
+            </div>
+        </div>
       </div>
 
-      <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-          <img src="http://filestore.c100.hasura.me/v1/file/1639c149-e4ea-4a2a-9351-86bef33cd927" class="img-responsive">
-      </div>
 
-      <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter spray">
-          <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-      </div>
-
-      <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter sprinkle">
-          <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-      </div>
     </div>
   </div>
 

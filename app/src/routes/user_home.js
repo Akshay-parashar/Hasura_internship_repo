@@ -54,8 +54,8 @@ router.get('/profile',function(req,res) {
           body: {
             type: "select",
             args: {
-              table: "photo",
-              columns: ["*"],
+              table: "photo_stats",
+              columns: ["id","content","no_likes"],
               where: {poster_id: req.cookies.userId }
             }
           },
@@ -68,16 +68,19 @@ router.get('/profile',function(req,res) {
         console.log("succesfully retrieved some user data");
         console.log(response[0]);
         data_user_stats = response[0];
+        data_user_stats.username = req.cookies.userName;
         /*console.log(response[0].id);
         console.log(response[0].name);
         console.log(response[0].photos);*/
         rp(user_images_req).then(function (response){
           console.log("succesfully retrieved user images");
+          console.log(response);
           response.forEach( function (image){
-          data_user_images.push(image.content);
+          data_user_images.push(image);
           });
           console.log("---------------");
           console.log(data_user_images);
+          res.render('profile',{logged_in: true, active_profile: true, images: data_user_images,user_stats: data_user_stats});
 
         })
         .catch(function(err){
@@ -91,7 +94,7 @@ router.get('/profile',function(req,res) {
         console.log(err);
       });
 
-        res.render('profile',{logged_in: true, active_profile: true});
+        //res.render('profile',{logged_in: true, active_profile: true});
     }
   });
 
