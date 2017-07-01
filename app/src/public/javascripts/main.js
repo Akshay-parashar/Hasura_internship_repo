@@ -1,5 +1,25 @@
 $(document).ready(function(){
 
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+  }
+  
+  //Current userid and auth token
+  var userId = getCookie("userId");
+  var token = getCookie("Authorization");
+
   //Event To adjust placment of navlinks in navbar
   if ($(window).width() > 768){
        $('.navbar-nav').addClass('pull-right');
@@ -76,24 +96,43 @@ $(document).ready(function(){
        if(!likes){ //to check if the image has 0 likes
          likes = 0;
        }
-      
+
        $("#like_btn").on('click',function(e){
          //var curr_like = $(this)
          console.log(likes);
          //$("#like_badge").html(likes+1);
          //e.stopPropagation();
-         /*$.ajax({
+         var token = "Bearer 7t3o1mv8fv2b9nhsbq825w3me3mpwvft";
+         $.ajax({
             type: "POST",
             url: "http://data.c100.hasura.me/v1/query",
             cache: false,
             crossDomain: true,
+            headers: { 'Content-Type' : 'application/json',
+                        'Authorization': token
+            },
             dataType: 'json',
+            data: JSON.stringify({
+              "type": "insert",
+                "args":{
+                        "table": "like",
+                        "objects": [
+                          { "user_id": userId,
+                            "photo_id": photo_id
+                          }
+                        ]
+                }
+            }),
             xhrFields: {
                 withCredentials: true
             },
+            error : function(err){
+              console.log(err);
+            },
             success: function (data) {
-                alert(data);
-          });*/
+                console.log(data);
+          }
+        });
        });
 
        $('#myModal').on('show.bs.modal', function () {

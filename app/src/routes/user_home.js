@@ -11,6 +11,38 @@ router.get('/', function(req, res, next) {
         res.redirect('../');
     }
     else if(identity == "authenticated user") {
+        //Make the necessary request to get the data
+        var imagefeed_data = [];
+
+        var imagefeed_data_req = {
+            method: 'POST',
+            uri:"http://data.c100.hasura.me/v1/query",
+            headers: {
+              "Authorization": req.cookies.Authorization
+            },
+            body: {
+              type: "select",
+              args: {
+                table: "user_imagefeed",
+                columns: ["no_likes","content","following_username","photo_id"],
+                where: {id: req.cookies.userId }
+              }
+            },
+            json: true
+        };
+
+        rp(imagefeed_data_req).then(function(response) {
+          response.forEach( function (image){
+          imagefeed_data.push(image);
+          });
+          /*console.log("-------------------")
+          console.log(imagefeed_data);*/
+
+        }).
+        catch(function (err) {
+          console.log(err);
+        });
+
         res.render('dashboard',{logged_in: true, active_home: true});
     }
   });
