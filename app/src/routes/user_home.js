@@ -34,10 +34,16 @@ router.get('/', function(req, res, next) {
         rp(imagefeed_data_req).then(function(response) {
           console.log(response);
           response.forEach( function (image){
+            if(!image.no_likes){
+              image.no_likes = 0;
+            }
+            if(!image.content){
+              return;
+            }
           imagefeed_data.push(image);
           });
-          //console.log("-------------------")
-          //console.log(imagefeed_data);
+          console.log("-------------------")
+          console.log(imagefeed_data);
           res.render('dashboard',{logged_in: true, active_home: true, image_data: imagefeed_data});
 
         }).
