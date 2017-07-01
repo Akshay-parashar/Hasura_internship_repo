@@ -32,22 +32,22 @@ router.get('/', function(req, res, next) {
         };
 
         rp(imagefeed_data_req).then(function(response) {
+          console.log(response);
           response.forEach( function (image){
           imagefeed_data.push(image);
           });
-          /*console.log("-------------------")
-          console.log(imagefeed_data);*/
+          //console.log("-------------------")
+          //console.log(imagefeed_data);
+          res.render('dashboard',{logged_in: true, active_home: true, image_data: imagefeed_data});
 
         }).
         catch(function (err) {
           console.log(err);
         });
 
-        res.render('dashboard',{logged_in: true, active_home: true});
-    }
-  });
-
-});
+    }// end - else if statement(authenticated user)
+  }); // end - checkUserIdentity()
+}); // end - route
 
 router.get('/profile',function(req,res) {
   //Role based access on the view
