@@ -90,6 +90,11 @@ a {
   max-width: 850px;
 }
 
+#profile_file {
+  visibility: hidden;
+  position: absolute;
+}
+
 .user_info {
   border: 2px solid red;
 }
@@ -108,7 +113,7 @@ a {
 }
 
 .padding{
-  padding: 10px 50px 50px 50px;
+  padding: 10px 40px 40px 40px;
 }
 
 .hide {
@@ -117,6 +122,10 @@ a {
 
 .profile_img {
   border-radius: 50%;
+}
+
+.prof_img_btn_div {
+  margin-top: 20px;
 }
 
 

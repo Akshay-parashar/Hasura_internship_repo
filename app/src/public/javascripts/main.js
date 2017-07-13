@@ -15,7 +15,7 @@ $(document).ready(function(){
     }
     return "";
   }
-  
+
   //Current userid and auth token
   var userId = getCookie("userId");
   var token = getCookie("Authorization");
@@ -102,7 +102,6 @@ $(document).ready(function(){
          console.log(likes);
          //$("#like_badge").html(likes+1);
          //e.stopPropagation();
-         var token = "Bearer 7t3o1mv8fv2b9nhsbq825w3me3mpwvft";
          $.ajax({
             type: "POST",
             url: "http://data.c100.hasura.me/v1/query",
@@ -152,5 +151,50 @@ $(document).ready(function(){
 
   console.log(guid());
 
+  $(document).on('click', '.browse', function(){
+  var file = $('#profile_file');
+  file.trigger('click');
+  });
+
+  $(document).on('change', '#profile_file', function(){
+    $(this).parent().find('.br_btn_text').text("Change");
+    $(this).parent().parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+  });
+
+  $(document).on('click', '.upload', function(){
+   //$(this).parent().parent().find('.form-control').val("Upload Profile Image", "");
+   var selected_file = $('#profile_file')[0].files[0];
+   //console.log("Selected file info: ");
+   //console.log(selected_file);
+   var reader = new FileReader();
+   reader.readAsDataURL(selected_file);
+   reader.onload = function(fl) {
+     var filestore_url = "http://filestore.c100.hasura.me/v1/file/" + guid();
+     var tk = "Bearer 5o7lfksynbezwkw9r5dl6b770dq0m0b7" //admin token (check if expired)
+     $.ajax({
+        type: "POST",
+        url: filestore_url,
+        cache: false,
+        crossDomain: true,
+        headers: { 'Content-Type' : selected_file.type,
+                    'Authorization': tk
+        },
+        data: JSON.stringify({
+          "img_data": encodeURIComponent(fl.target.result)
+        }),
+        error: function(err){
+          console.log(err);
+          //console.log("this is the tokn: " + token);
+          //console.log("this is the file type: " + selected_file.type);
+          //console.log("this is the data: " + fl.target.result);
+        },
+        success: function (data) {
+            console.log(data);
+        }
+    });
+   }
+
+   $(this).parent().find('.br_btn_text').text("Browse");
+  });
 
 });
