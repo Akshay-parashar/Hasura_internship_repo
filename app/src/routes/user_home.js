@@ -138,6 +138,75 @@ router.get('/profile',function(req,res) {
 
 })
 
+router.get('/search',function(req,res) {
+  var ss_usr_id;
+  var ss_prof_data;
+  var usrname = req.query.username;
+  var get_user_info = {
+      method: 'POST',
+      uri: "http://data.c100.hasura.me/v1/query",
+      //Add the Header entry with the bearer token
+      headers: {
+        "Authorization": req.cookies.Authorization
+      },
+      body: {
+        type: "select",
+        args: {
+          table: "user_stats",
+          columns: ["*"],
+          where: {username: usrname }
+        }
+      },
+      json: true // Automatically stringifies the body to JSON
+  }
+
+  if(usrname == req.cookies.userName) {
+    res.redirect('profile');
+  }
+
+  else {
+  rp(get_user_info).then(function(response){
+    ss_prof_data = response[0];
+    var follow_info = {
+        method: 'POST',
+        uri: "http://data.c100.hasura.me/v1/query",
+        //Add the Header entry with the bearer token
+        headers: {
+          "Authorization": req.cookies.Authorization
+        },
+        body: {
+          type: "select",
+          args: {
+            table: "following_info",
+            columns: ["*"],
+            where: {user_id: req.cookies.userId , following_id: ss_prof_data.id}
+          }
+        },
+        json: true // Automatically stringifies the body to JSON
+    }
+    //make another request to find if the user already follows this user or not
+    rp(follow_info).then(function(resp){
+      if(resp.length == 1) {
+        ss_prof_data.follows = true
+      }
+      else {
+        ss_prof_data.follows = false;
+      }
+      res.render('ss_user_prof',{logged_in: true, data: ss_prof_data});
+    })
+      .catch(function(err) {
+          console.log(err);
+      });
+
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+
+  } //end else
+
+});
+
 // router.get('/dashboard', function(req, res, next) {
 //   res.send("Hello User, this your personal dashboard");
 // });

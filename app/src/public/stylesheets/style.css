@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  background: #eee !important;
+  background: url("/images/background.jpg");
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -122,6 +122,8 @@ a {
 
 .profile_img {
   border-radius: 50%;
+  height: 200px;
+  width: 200px;
 }
 
 .prof_img_btn_div {
@@ -141,6 +143,10 @@ a {
 
 .user_post:hover{
   cursor: pointer;
+}
+
+.usrnme {
+  display: inline;
 }
 
 

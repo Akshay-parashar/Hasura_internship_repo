@@ -13,9 +13,9 @@
          <ul class="nav navbar-nav">
            {{#if logged_in}}
            <li>
-           <form class="navbar-form" role="search">
+           <form class="navbar-form" role="search" action="/user_home/search" method="get">
              <div class="input-group">
-                 <input type="text" class="form-control" placeholder="search" name="q">
+                 <input type="text" class="form-control" placeholder="Search With Username" name="username">
                  <div class="input-group-btn">
                      <button class="btn btn-default search_btn" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                  </div>

@@ -141,6 +141,37 @@ $(document).ready(function(){
 
    });
 
+   //Follow/Following button
+   $("#follow_btn").on('click',function(){
+     var ssusrid = $(this).data('usrsid');
+     $.ajax({
+        type: "POST",
+        url: "http://data.c100.hasura.me/v1/query",
+        cache: false,
+        crossDomain: true,
+        headers: { 'Content-Type' : 'application/json',
+                    'Authorization': token
+        },
+        data: JSON.stringify({
+          "type": "insert",
+            "args":{
+                    "table": "following",
+                    "objects": [
+                      { "user_id": userId,
+                        "following_id": ssusrid
+                      }
+                    ]
+            }
+        }),
+        error : function(err){
+          console.log(err);
+        },
+        success: function (data) {
+            console.log(data);
+          }
+      });
+    });
+
 
 
   //Handle File upload
@@ -164,8 +195,6 @@ $(document).ready(function(){
   $(document).on('click', '.upload', function(){
    //$(this).parent().parent().find('.form-control').val("Upload Profile Image", "");
    var selected_file = $('#profile_file')[0].files[0];
-   //console.log("Selected file info: ");
-   //console.log(selected_file);
    var reader = new FileReader();
    reader.readAsDataURL(selected_file);
    reader.onload = function(fl) {
@@ -176,17 +205,14 @@ $(document).ready(function(){
         url: filestore_url,
         cache: false,
         crossDomain: true,
-        headers: { 'Content-Type' : selected_file.type,
+        headers: { 'Content-Type' : "text/plain",
                     'Authorization': tk
         },
         data: JSON.stringify({
-          "img_data": encodeURIComponent(fl.target.result)
+          "img_data": fl.target.result
         }),
         error: function(err){
           console.log(err);
-          //console.log("this is the tokn: " + token);
-          //console.log("this is the file type: " + selected_file.type);
-          //console.log("this is the data: " + fl.target.result);
         },
         success: function (data) {
             console.log(data);

@@ -125,7 +125,8 @@ router.post('/register',function(req,res,next){
                             objects: [
                                 {
                                   id: user_id,
-                                  name: name
+                                  name: name,
+                                  username: username
                                 }
                             ]
                           }
