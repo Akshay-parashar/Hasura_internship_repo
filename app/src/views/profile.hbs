@@ -4,39 +4,43 @@
     <div class="user_info container-fluid">
       <div class="row">
         <div class="col-lg-3 col-md-3 padding">
-          <img src="http://filestore.c100.hasura.me/v1/file/ce0d5674-aa4d-423f-bb47-6bcbd6ba28e8" class="profile_img">
+          <img src="http://filestore.c100.hasura.me/v1/file/{{user_stats.profile_image_link}}" class="profile_img">
             <div class=" prof_img_btn_div">
               <input type="file" name="img[]" id="profile_file" accept="image/*">
-              <span class="btn-group">
+              <div class="input-group">
+                <span class="input-group-btn">
                 <button class="browse btn btn-primary" type="button"><i class="glyphicon glyphicon-search"></i> <span class="br_btn_text">Browse</span></button>
-                <button class="upload btn btn-info" type="button"><i class="glyphicon glyphicon-upload"></i> Upload</button>
-              </span>
+                </span>
+                <span class="input-group-btn">
+                <button class="upload btn btn-info" type="button"><i class="glyphicon glyphicon-upload"></i> <span id="pp_up_btn_text">Upload</span></button>
+                </span>
+              </div>
             </div>
             <input type="text" class="form-control" disabled placeholder="Upload Profile Image">
         </div>
         <div class="col-lg-9 col-md-9 mid">
           <div class="row">
-            <div class="col-md-12 col-lg-12">
+            <div class="col-md-6 col-lg-6">
               <h3>{{user_stats.username}}</h3>
+              <!-- <button class="btn btn-info" type="button" id="postup_btn"> Post a pic</button> -->
+            </div>
+            <div class="col-md-3 col-lg-3 col-md-offset-3">
+              <!-- <h3>Description</h3> -->
+              <button class="btn btn-info" type="button" id="postup_btn" data-toggle="modal" data-target="#upload_modal"><i class="glyphicon glyphicon-picture"></i> Post a pic</button>
             </div>
             <div class="col-md-12 col-lg-12">
-              <h3>Description</h3>
+              <h3>
+                Some Default Description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+              </h3>
             </div>
           </div>
 
         </div>
-        <!-- <div class="col-lg-3 col-md-3 mid">
-          <div class="row">
-            <div class="col-md-6 col-lg-6">
-              <label class="btn btn-primary">
-                  Upload <input type="file" style="display: none;">
-              </label>
-            </div>
-
-          </div>
-        </div> -->
       </div>
     </div>
+
 
     <div class="user_stats container-fluid">
       <div class="row">
@@ -77,12 +81,40 @@
                     <img class="img-responsive modal_img" src=""/>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary disabled" id="like_btn"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Likes:  <span id="like_badge" class="badge"></span></button>
                     <button type="button" class="btn btn-info" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Close</button>
-                    <button type="button" class="btn btn-success" id="like_btn"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Like  <span id="like_badge"></span></button>
                 </div>
             </div>
         </div>
       </div>
+
+      <div id="upload_modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title text-center">Upload a picture</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <input type="file" name="img[]" id="up_file" accept="image/*">
+                  <div class="input-group">
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" type="button" id="feed_pic_browse_btn"><i class="glyphicon glyphicon-folder-open"></i> <span class="feed_file_br_text"> Browse</span></button>
+                    </span>
+                    <input type="text" class="form-control feed_sel_fname"  disabled placeholder="Upload a pic">
+                  </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+              </div><!-- /.row -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-info" id="feed_file_upload_btn"><i class="glyphicon glyphicon-upload"></i> Upload</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
 
     </div>

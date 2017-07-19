@@ -16,6 +16,38 @@ $(document).ready(function(){
     return "";
   }
 
+  var notif = function(notif_type,notif_text,glyph,pos,anim_in,anim_out) {
+    if(!glyph){
+      glyph = "glyphicon glyphicon-asterisk";
+    }
+    if(!pos){
+      pos = "top";
+    }
+    if(!anim_in && !anim_out){
+      anim_in = 'animated bounceInDown';
+      anim_out = 'animated bounceOutUp';
+    }
+    $.notify({
+      //options
+      icon: glyph,
+      title: '<strong> Notification: </strong>',
+      message: notif_text
+    },{
+      //settings
+       type: notif_type,
+       allow_dismiss: true,
+       delay: 4000,
+       animate: {
+           enter: anim_in,
+           exit: anim_out
+       },
+       placement: {
+		       from: pos,
+		       align: "right"
+	     }
+    });
+  }
+
   //Current userid and auth token
   var userId = getCookie("userId");
   var token = getCookie("Authorization");
@@ -97,7 +129,7 @@ $(document).ready(function(){
          likes = 0;
        }
 
-       $("#like_btn").on('click',function(e){
+       /*$("#like_btn").on('click',function(e){
          //var curr_like = $(this)
          console.log(likes);
          //$("#like_badge").html(likes+1);
@@ -132,7 +164,7 @@ $(document).ready(function(){
                 console.log(data);
           }
         });
-       });
+      });*/
 
        $('#myModal').on('show.bs.modal', function () {
            $(".modal_img").attr("src", image);
@@ -141,7 +173,7 @@ $(document).ready(function(){
 
    });
 
-   //Follow/Following button
+   //Follow button
    $("#follow_btn").on('click',function(){
      var ssusrid = $(this).data('usrsid');
      $.ajax({
@@ -168,9 +200,47 @@ $(document).ready(function(){
         },
         success: function (data) {
             console.log(data);
+            notif("info","You are now following this user,page will refresh shortly!","glyphicon glyphicon-ok");
+            setTimeout(function() {
+              location.reload();
+            },3000);
           }
       });
     });
+
+    //Following button
+    $("#following_btn").on('click',function(){
+      var followingid = $(this).data('usrsid');
+      $.ajax({
+         type: "POST",
+         url: "http://data.c100.hasura.me/v1/query",
+         cache: false,
+         crossDomain: true,
+         headers: { 'Content-Type' : 'application/json',
+                     'Authorization': token
+         },
+         data: JSON.stringify({
+           "type": "delete",
+             "args":{
+                     "table": "following",
+                     "where": { user_id: userId , following_id: followingid},
+                     "returning" : ["id"]
+             }
+         }),
+         error : function(err){
+           console.log(err);
+         },
+         success: function (data) {
+             console.log(data);
+             notif("warning","You have unfollowed this user,page will refresh shortly!","glyphicon glyphicon-ok");
+             setTimeout(function() {
+               location.reload();
+             },3000);
+           }
+       });
+     });
+
+
 
 
 
@@ -182,6 +252,75 @@ $(document).ready(function(){
 
   console.log(guid());
 
+  // Feed image upload
+  $("#feed_pic_browse_btn").on('click', function(){
+    var feed_file = $('#up_file');
+    feed_file.trigger('click');
+  });
+
+  $('#up_file').on('change',function() {
+    $(".feed_file_br_text").text("Change");
+    $('.feed_sel_fname').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    notif("info","Image Selected","glyphicon glyphicon-ok","bottom","animated bounceInRight","animated bounceOutRight");
+  });
+
+  $("#feed_file_upload_btn").click(function() {
+    var selected_image = $('#up_file')[0].files[0];
+    if(!selected_image) {
+      notif("danger","Please select an image to upload","glyphicon glyphicon-remove","bottom","animated bounceInRight","animated bounceOutRight");
+      return;
+    }
+    var tokval = token.split(" ");
+    var upfileid = guid();
+    var filestore_urll = "http://filestore.c100.hasura.me/v1/file/" + upfileid;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+     if (this.readyState == 4 && this.status == 200) {
+         console.log("Response from XMLHttp: " + this.responseText);
+         //another request to store fileid in photos table
+         $.ajax({
+            type: "POST",
+            url: "http://data.c100.hasura.me/v1/query",
+            cache: false,
+            crossDomain: true,
+            headers: { 'Content-Type' : 'application/json',
+                        'Authorization': token
+            },
+            data: JSON.stringify({
+              "type": "insert",
+                "args":{
+                        "table": "photo",
+                        "objects": [
+                            {
+                              "poster_id": userId,
+                              "content": upfileid
+                            }
+                        ]
+                }
+            }),
+            error: function(err){
+              console.log(err);
+            },
+            success: function (data) {
+                console.log("Success response from $.ajax!!");
+                console.log(data);
+                $("#upload_modal").modal('hide');
+                notif("success","Image succesfully uploaded. Page will refresh shortly","glyphicon glyphicon-ok");
+                setTimeout(function() {
+                  location.reload();
+                },3000);
+            }
+        });
+     }
+    };
+    req.open('POST',filestore_urll, true);
+    req.setRequestHeader('Authorization','Bearer '+ tokval[1]);
+    req.setRequestHeader('Content-type', + selected_image.type);
+    req.send(selected_image);
+  });
+  //------
+
+  // Profile image upload
   $(document).on('click', '.browse', function(){
   var file = $('#profile_file');
   file.trigger('click');
@@ -190,37 +329,65 @@ $(document).ready(function(){
   $(document).on('change', '#profile_file', function(){
     $(this).parent().find('.br_btn_text').text("Change");
     $(this).parent().parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    notif("info","Image Selected","glyphicon glyphicon-ok");
   });
+
 
   $(document).on('click', '.upload', function(){
    //$(this).parent().parent().find('.form-control').val("Upload Profile Image", "");
    var selected_file = $('#profile_file')[0].files[0];
-   var reader = new FileReader();
-   reader.readAsDataURL(selected_file);
-   reader.onload = function(fl) {
-     var filestore_url = "http://filestore.c100.hasura.me/v1/file/" + guid();
-     var tk = "Bearer 5o7lfksynbezwkw9r5dl6b770dq0m0b7" //admin token (check if expired)
-     $.ajax({
-        type: "POST",
-        url: filestore_url,
-        cache: false,
-        crossDomain: true,
-        headers: { 'Content-Type' : "text/plain",
-                    'Authorization': tk
-        },
-        data: JSON.stringify({
-          "img_data": fl.target.result
-        }),
-        error: function(err){
-          console.log(err);
-        },
-        success: function (data) {
-            console.log(data);
-        }
-    });
+   if(!selected_file) {
+     notif("danger","Please select an image to upload","glyphicon glyphicon-remove");
+     return;
    }
+   var tok = token.split(" ");
+   var fileid = guid();
+   //console.log("This is info about selected file.files[0]: " + selected_file.files[0]);
+   var filestore_url = "http://filestore.c100.hasura.me/v1/file/" + fileid;
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        console.log("Response from XMLHttp: " + this.responseText);
+        //another request to store fileid in app_user table
+        $.ajax({
+           type: "POST",
+           url: "http://data.c100.hasura.me/v1/query",
+           cache: false,
+           crossDomain: true,
+           headers: { 'Content-Type' : 'application/json',
+                       'Authorization': token
+           },
+           data: JSON.stringify({
+             "type": "update",
+               "args":{
+                       "table": "app_user",
+                       "$set" : {"profile_image_link" : fileid},
+                       "where" : {"id" : userId},
+                       "returning" : ["id"]
+               }
+           }),
+           error: function(err){
+             console.log(err);
+           },
+           success: function (data) {
+               console.log("Success response from $.ajax!!");
+               console.log(data);
+               notif("success","Image succesfully uploaded. Page will refresh shortly","glyphicon glyphicon-ok");
+               setTimeout(function() {
+                 location.reload();
+               },3000);
+           }
+       });
+    }
+   };
+   xhttp.open('POST',filestore_url, true);
+   xhttp.setRequestHeader('Authorization','Bearer '+ tok[1]);
+   xhttp.setRequestHeader('Content-type', + selected_file.type);
+   xhttp.send(selected_file);
 
    $(this).parent().find('.br_btn_text').text("Browse");
+   $(this).parent().parent().find('.form-control').val($(this).val().replace("", '/C:\\fakepath\\/i'));
   });
+  //------------------------
 
 });

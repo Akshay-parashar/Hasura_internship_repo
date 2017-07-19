@@ -78,8 +78,13 @@ a {
 
 .section_profile_info {
   margin-bottom: 40px;
-  border: 2px solid black;
+  /*border: 2px solid black;*/
   margin-top: 40px;
+  background: #eee;
+  border-radius: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 .home-container {
@@ -90,22 +95,22 @@ a {
   max-width: 850px;
 }
 
-#profile_file {
+#profile_file , #up_file {
   visibility: hidden;
   position: absolute;
 }
 
 .user_info {
-  border: 2px solid red;
+  /*border: 2px solid red;*/
 }
 
 .user_stats {
-  border: 2px solid blue;
+  /*border: 2px solid blue;*/
 }
 
 .mid {
   margin: 20px auto;
-  border: 2px solid green;
+  /*border: 2px solid green;*/
 }
 
 .search_btn {
@@ -147,6 +152,10 @@ a {
 
 .usrnme {
   display: inline;
+}
+
+#postup_btn,.ff_btn {
+  margin-top: 10px;
 }
 
 
