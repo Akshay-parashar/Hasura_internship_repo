@@ -59,8 +59,10 @@ router.post('/login',function(req,res,next) {
   })
   .catch(function (err) {
     //login not successfull
-      console.log(err);
-
+      if(err.statusCode == 403){
+          var cred_error = "Incorrect credentials. Please Try again."
+         res.render('login',{active_login: true , error: cred_error });
+      }
   });
 
 });
@@ -84,10 +86,12 @@ router.post('/register',function(req,res,next){
           console.log("there are validation errors");
           console.log(result.isEmpty());
           var errors = result.mapped();
+          result = {};
           res.render('register',{active_register: true, errors: errors });
       }
      else {
           console.log("no errors :)");
+          console.log("making request to auth endpoint-------------------------------------")
           //Send an api call to hasura auth and then redirect
           var signup = {
               method: 'POST',
@@ -150,6 +154,25 @@ router.post('/register',function(req,res,next){
                   console.log("resolve this error");
                   // User account cannot be created due to some errors
                   console.log(err);
+                  var error_code = err.statusCode;
+                  var error_mess = err.error.message;
+                  if(error_code == 400) {
+                    //Fix for password too short
+                    res.render('register',{active_register: true, pass_err: error_mess });
+                  }
+                  else if(error_code == 409) {
+                    //Fix for username or email clash
+                    if(error_mess.indexOf('username') >= 0){
+                      //username is clashing
+                      var usrnme_err = "User name already exists"
+                      res.render('register',{active_register: true, username_err: usrnme_err });
+                    }
+                    else{
+                      var mail_err = "This email is already registered"
+                      res.render('register',{active_register: true, email_err: mail_err });
+                    }
+                  }
+
               });
        }
    });

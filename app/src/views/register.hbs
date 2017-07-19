@@ -16,7 +16,7 @@
         <label class="col-md-4 control-label">Name</label>
         <div class="col-md-4 inputGroupContainer">
           <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user accent"></i></span>
             <input name="name" placeholder="First Name" class="form-control" type="text">
             <span></span>
           </div>
@@ -36,7 +36,7 @@
         <label class="col-md-4 control-label">Username</label>
         <div class="col-md-4 inputGroupContainer">
           <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user accent"></i></span>
             <input name="user_name" placeholder="Username" class="form-control" type="text">
             <span></span>
           </div>
@@ -47,6 +47,9 @@
                 <div class="alert alert-danger">{{errors.user_name.msg}}</div>
               {{/if}}
           {{/if}}
+          {{#if username_err}}
+            <div class="alert alert-danger">{{username_err}}</div>
+          {{/if}}
         </div>
       </div>
 
@@ -55,7 +58,7 @@
         <label class="col-md-4 control-label">E-Mail</label>
         <div class="col-md-4 inputGroupContainer">
           <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope accent"></i></span>
             <input name="email" placeholder="E-Mail Address" class="form-control" type="email">
             <span></span>
           </div>
@@ -66,6 +69,9 @@
                 <div class="alert alert-danger">{{errors.email.msg}}</div>
               {{/if}}
           {{/if}}
+          {{#if email_err}}
+            <div class="alert alert-danger">{{email_err}}</div>
+          {{/if}}
         </div>
       </div>
 
@@ -75,7 +81,7 @@
         <label class="col-md-4 control-label">Password</label>
         <div class="col-md-4 inputGroupContainer">
           <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock accent"></i></span>
             <input name="user_password" id="usr_pass" placeholder="Password" class="form-control" type="password">
               <span></span>
           </div>
@@ -87,6 +93,9 @@
                 <div class="alert alert-danger">{{errors.user_password.msg}}</div>
               {{/if}}
           {{/if}}
+          {{#if pass_err}}
+            <div class="alert alert-danger">{{pass_err}}</div>
+          {{/if}}
         </div>
       </div>
 
@@ -96,7 +105,7 @@
         <label class="col-md-4 control-label">Confirm Password</label>
         <div class="col-md-4 inputGroupContainer">
           <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock accent"></i></span>
             <input name="confirm_password" placeholder="Confirm Password" class="form-control" type="password">
             <span></span>
           </div>
@@ -117,9 +126,11 @@
       <div class="form-group">
         <label class="col-md-4 control-label"></label>
         <div class="col-md-4 center-block"><br>
-          <button type="submit" class="btn btn-warning center-block">SUBMIT <span class="glyphicon glyphicon-send"></span></button>
+          <button type="submit" class="btn btn-success center-block">SUBMIT <span class="glyphicon glyphicon-send "></span></button>
         </div>
+
       </div>
+
 
     </fieldset>
   </form>
