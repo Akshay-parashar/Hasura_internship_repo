@@ -7,7 +7,7 @@ router.get('/', function(req, res) {
   //check for user identity and then redirect accordingly
   checkUserIdentity(req.cookies.Authorization,"root",function(identity){
     if(identity == "anon user" || identity == "user token expired") {
-        res.render('index',{active_about: true});
+        res.render('index');
     }
     else if(identity == "authenticated user") {
         res.redirect('../user_home');

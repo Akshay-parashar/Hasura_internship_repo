@@ -9,7 +9,7 @@
               Uploaded By : {{this.following_username}}
             </h3>
             <h3 class="panel-title pull-right">
-              Likes : <span class="badge"> {{this.no_likes}} </span>
+              Likes : <span class="badge like_badge"> {{this.no_likes}} </span>
             </h3>
           </div>
           <div class="panel-body">
@@ -20,9 +20,13 @@
             </div>
           </div>
           <div class="panel-footer">
-            <button type="button" class="btn btn-success center-block">
-              <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Like
+            <button type="button" class="photo_like_btn btn {{#if this.liked}}btn-info{{/if}} btn-success center-block"
+            {{#if this.liked}}data-liked="true"{{else}}data-liked="false"{{/if}} data-photoid={{this.photo_id}}
+            data-likes={{this.no_likes}}>
+              <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+              <span class="lbtn_text">{{#if this.liked}}Liked{{else}}Like{{/if}}</span>
             </button>
+
           </div>
         </div>
       </div>

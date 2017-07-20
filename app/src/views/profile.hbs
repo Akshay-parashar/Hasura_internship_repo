@@ -58,13 +58,13 @@
 
   </div>
 
-  <div class="section_profile_photos">
+  <div class="well section_profile_photos">
     <div class="row">
 
       {{#if images}}
         {{#each images}}
-          <div class="user_post col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-              <img src="http://filestore.c100.hasura.me/v1/file/{{this.content}}" class="img-responsive"
+          <div class="user_post col-lg-4 col-md-4">
+              <img src="http://filestore.c100.hasura.me/v1/file/{{this.content}}" class="img-responsive feed_img"
               data-toggle="modal" data-target="#myModal" data-photoid={{this.id}} data-likes={{this.no_likes}} >
           </div>
         {{/each}}

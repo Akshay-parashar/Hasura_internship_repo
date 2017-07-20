@@ -52,6 +52,14 @@ $(document).ready(function(){
   var userId = getCookie("userId");
   var token = getCookie("Authorization");
 
+  //Search user cookie
+  var sunf = getCookie("searchUserNotFound");
+
+  if(sunf) {
+    notif("danger","No user exists with this username, try again with correct username.","glyphicon glyphicon-remove");
+    document.cookie = "searchUserNotFound=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
   //Event To adjust placment of navlinks in navbar
   if ($(window).width() > 768){
        $('.navbar-nav').addClass('pull-right');
@@ -241,8 +249,99 @@ $(document).ready(function(){
      });
 
 
+     //Like button
+     $(".photo_like_btn").on('click', function(){
+       var isLiked = $(this).data('liked');
+       var pid = $(this).data('photoid');
+       var button_context = $(this);
+       var lk_count = $(this).data('likes');
 
+       if(isLiked){
+         /*console.log("This is value of current likes: " + ($(this).data('likes')));
+         console.log("This is value of likes after disliking: " + ($(this).data('likes')-1));
+         button_context.data('liked',false);
+         button_context.data('likes',($(this).data('likes')-1));*/
+         //photo is liked already
+         $.ajax({
+            type: "POST",
+            url: "http://data.c100.hasura.me/v1/query",
+            cache: false,
+            crossDomain: true,
+            headers: { 'Content-Type' : 'application/json',
+                        'Authorization': token
+            },
+            data: JSON.stringify({
+              "type": "delete",
+                "args":{
+                        "table": "like",
+                        "where": { user_id: userId , photo_id: pid},
+                        "returning" : ["photo_id"]
+                }
+            }),
+            error : function(err){
+              console.log(err);
+            },
+            success: function (data) {
+                console.log(data);
+                notif("warning","You have unliked this photo!","glyphicon glyphicon-asterisk");
+                //change button text
+                button_context.parent().parent().find('.like_badge').text(lk_count-1);
+                button_context.find('.lbtn_text').text('Like');
+                button_context.parent().find('.photo_like_btn').removeClass('btn-info').addClass('btn-success');
+                //button_context.removeClass('btn-info').addClass('btn-success');
+                button_context.data('liked',false);
+                button_context.data('likes',lk_count-1);
+                lk_count = lk_count -1;
+              }
+          });
+       } // end if
 
+       else{
+         //like this photo
+         /*console.log("This is value of current likes: " + ($(this).data('likes')));
+         console.log("This is value of likes after liking: " + ($(this).data('likes')+1));
+         button_context.data('liked',true);
+         button_context.data('likes',($(this).data('likes')+1));*/
+         //var like_count = $(this).data('likes');
+         $.ajax({
+            type: "POST",
+            url: "http://data.c100.hasura.me/v1/query",
+            cache: false,
+            crossDomain: true,
+            headers: { 'Content-Type' : 'application/json',
+                        'Authorization': token
+            },
+            data: JSON.stringify({
+              "type": "insert",
+                "args":{
+                        "table": "like",
+                        "objects": [
+                          { "user_id": userId,
+                            "photo_id": pid
+                          }
+                        ]
+                }
+            }),
+            error : function(err){
+              console.log(err);
+            },
+            success: function (data) {
+                console.log(data);
+                notif("info","You have liked this photo","glyphicon glyphicon-ok");
+                //change btn text and color and increase likes badge
+                button_context.parent().parent().find('.like_badge').text(lk_count+1);
+                button_context.find('.lbtn_text').text('Liked');
+                button_context.parent().find('.photo_like_btn').removeClass('btn-success').addClass('btn-info');
+                //button_context.removeClass('btn-success').addClass('btn-info');
+                button_context.data('liked',true);
+                button_context.data('likes',lk_count+1);
+                lk_count = lk_count + 1;
+              }
+          }); //end ajax */
+
+       } // end else
+
+     });
 
   //Handle File upload
   const guid = () => ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

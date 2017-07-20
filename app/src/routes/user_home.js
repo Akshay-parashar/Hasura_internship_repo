@@ -11,8 +11,27 @@ router.get('/', function(req, res, next) {
         res.redirect('../');
     }
     else if(identity == "authenticated user") {
+        console.log("Logged in---------------------------");
         //Make the necessary request to get the data
         var imagefeed_data = [];
+        var like_data = [];
+
+        var like_data_req = {
+            method: 'POST',
+            uri:"http://data.c100.hasura.me/v1/query",
+            headers: {
+              "Authorization": req.cookies.Authorization
+            },
+            body: {
+              type: "select",
+              args: {
+                table: "like",
+                columns: ["photo_id"],
+                where: {user_id: req.cookies.userId }
+              }
+            },
+            json: true
+        };
 
         var imagefeed_data_req = {
             method: 'POST',
@@ -31,25 +50,49 @@ router.get('/', function(req, res, next) {
             json: true
         };
 
-        rp(imagefeed_data_req).then(function(response) {
-          console.log(response);
-          response.forEach( function (image){
-            if(!image.no_likes){
-              image.no_likes = 0;
-            }
-            if(!image.content){
-              return;
-            }
-          imagefeed_data.push(image);
-          });
-          console.log("-------------------")
-          console.log(imagefeed_data);
-          res.render('dashboard',{logged_in: true, active_home: true, image_data: imagefeed_data});
+        rp(like_data_req).then(function(response) {
+          //user has liked some pics
+          if(response.length > 0){
+            console.log("User has liked some pics and data is stored in array");
+            response.forEach(function(likedata){
+            like_data.push(likedata.photo_id);
+            });
 
-        }).
-        catch(function (err) {
+            rp(imagefeed_data_req).then(function(response) {
+              console.log(response);
+              response.forEach( function (image){
+                if(like_data.length > 0 && image.photo_id) {
+                  console.log("Matching image.id: " + image.photo_id + " in liked_data array");
+                  if(like_data.indexOf(image.photo_id) >= 0){
+                    image.liked = true;
+                  }
+                }
+                if(!image.no_likes){
+                  image.no_likes = 0;
+                }
+                if(!image.content){
+                  return;
+                }
+              imagefeed_data.push(image);
+              });
+              console.log("This is data being sent to the view ----")
+              console.log(imagefeed_data);
+              res.render('dashboard',{logged_in: true, active_home: true, image_data: imagefeed_data});
+
+            }).
+            catch(function (err) {
+              console.log(err);
+            });
+
+          }
+          else {
+            //user has liked 0 pics
+            console.log("User has liked 0 pics");
+          }
+        })
+        .catch(function(err) {
           console.log(err);
-        });
+        })
 
     }// end - else if statement(authenticated user)
   }); // end - checkUserIdentity()
@@ -167,6 +210,7 @@ router.get('/search',function(req,res) {
   else {
   rp(get_user_info).then(function(response){
     ss_prof_data = response[0];
+    if(response.length){
     var follow_info = {
         method: 'POST',
         uri: "http://data.c100.hasura.me/v1/query",
@@ -188,18 +232,63 @@ router.get('/search',function(req,res) {
     rp(follow_info).then(function(resp){
       if(resp.length == 1) {
         ss_prof_data.follows = true
+        var ss_img_data = [];
+        //This user follows searched user show this user his images
+        if(ss_prof_data.posts) {
+          //user has some posts
+          var ss_images_req = {
+              method: 'POST',
+              uri:"http://data.c100.hasura.me/v1/query",
+              headers: {
+                "Authorization": req.cookies.Authorization
+              },
+              body: {
+                type: "select",
+                args: {
+                  table: "photo",
+                  columns: ["id","content"],
+                  where: {poster_id: ss_prof_data.id }
+                }
+              },
+              json: true
+          };
+
+          rp(ss_images_req).then(function(response){
+            console.log("This is image response for searched user");
+            response.forEach(function(susrimg){
+              ss_img_data.push(susrimg);
+            });
+            console.log(ss_img_data);
+            res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, ss_images: ss_img_data});
+          })
+          .catch(function(err){
+            console.log(err);
+          });
+        }
+        else{
+          res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, no_images: true});
+        }
+
       }
       else {
         ss_prof_data.follows = false;
+        res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, no_follow: true});
       }
-      res.render('ss_user_prof',{logged_in: true, data: ss_prof_data});
     })
       .catch(function(err) {
+          console.log("Error for follow-info----------------------------------");
           console.log(err);
       });
+    } //end if(response.length)
+    else {
+      //No user found with the given username
+      res.cookie("searchUserNotFound",true);
+      res.redirect('back');
+    }
 
     })
     .catch(function(err) {
+      console.log("Error for get-user-stats----------------------------------");
       console.log(err);
     });
 
@@ -229,6 +318,7 @@ router.get('/logout',function(req,res,next){
     res.clearCookie("Authorization");
     res.clearCookie("userId");
     res.clearCookie("userName");
+    res.clearCookie("searchUserNotFound");
     //redirect to home page of application
     res.redirect('../');
   })
@@ -281,6 +371,5 @@ function checkUserIdentity(authToken,from,callback) {
     callback("anon user");
   }
 }
-
 
 module.exports = router;

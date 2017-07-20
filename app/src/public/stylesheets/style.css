@@ -1,7 +1,7 @@
 body {
   padding: 50px;
   background: url("/images/background.jpg");
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 15px "Roboto", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -30,6 +30,12 @@ a {
 .show_link {
   display: inline !important;
 }
+
+.brand-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+}
+
 /*=========================
   Login Styles
 ===========================*/
@@ -95,6 +101,7 @@ a {
 
 .img-feed-panel {
   max-width: 850px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 #profile_file , #up_file {
@@ -146,6 +153,11 @@ a {
 .user_post
 {
     margin-bottom: 30px;
+}
+
+.feed_img {
+  width: 100%;
+  height: 200px;
 }
 
 .user_post:hover{
