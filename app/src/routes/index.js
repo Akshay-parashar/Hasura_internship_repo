@@ -35,7 +35,7 @@ function checkUserIdentity(authToken,from,callback) {
     var token = authToken.split(" ");
     var user_info = {
         method: 'GET',
-        uri: "http://auth.app.hasura.me/user/account/info",
+        uri: "http://auth.c100.hasura.me/user/account/info",
         //Add the Header entry with the bearer token
         headers: {
           "Authorization": authToken

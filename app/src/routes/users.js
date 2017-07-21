@@ -37,7 +37,7 @@ router.post('/login',function(req,res,next) {
 
   var login = {
       method: 'POST',
-      uri: "http://auth.app.hasura.me/login",
+      uri: "http://auth.c100.hasura.me/login",
       //resolveWithFullResponse: true,
       body: {
           username : username,
@@ -95,7 +95,7 @@ router.post('/register',function(req,res,next){
           //Send an api call to hasura auth and then redirect
           var signup = {
               method: 'POST',
-              uri: "http://auth.app.hasura.me/signup",
+              uri: "http://auth.c100.hasura.me/signup",
               body: {
                   username : username,
                   email : email,
@@ -118,7 +118,7 @@ router.post('/register',function(req,res,next){
                   //Register this user in app_user table
                   var reg_app_user = {
                       method: 'POST',
-                      uri:"http://data.app.hasura.me/v1/query",
+                      uri:"http://data.c100.hasura.me/v1/query",
                       headers: {
                         "Authorization": user_token
                       },
@@ -187,7 +187,7 @@ function checkUserIdentity(authToken,from,callback) {
     var token = authToken.split(" ");
     var user_info = {
         method: 'GET',
-        uri: "http://auth.app.hasura.me/user/account/info",
+        uri: "http://auth.c100.hasura.me/user/account/info",
         //Add the Header entry with the bearer token
         headers: {
           "Authorization": authToken

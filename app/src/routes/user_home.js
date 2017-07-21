@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 
         var like_data_req = {
             method: 'POST',
-            uri:"http://data.app.hasura.me/v1/query",
+            uri:"http://data.c100.hasura.me/v1/query",
             headers: {
               "Authorization": req.cookies.Authorization
             },
@@ -35,7 +35,7 @@ router.get('/', function(req, res, next) {
 
         var imagefeed_data_req = {
             method: 'POST',
-            uri:"http://data.app.hasura.me/v1/query",
+            uri:"http://data.c100.hasura.me/v1/query",
             headers: {
               "Authorization": req.cookies.Authorization
             },
@@ -139,7 +139,7 @@ router.get('/profile',function(req,res) {
 
       var user_stats_req = {
           method: 'POST',
-          uri:"http://data.app.hasura.me/v1/query",
+          uri:"http://data.c100.hasura.me/v1/query",
           headers: {
             "Authorization": req.cookies.Authorization
           },
@@ -156,7 +156,7 @@ router.get('/profile',function(req,res) {
 
       var user_images_req = {
           method: 'POST',
-          uri:"http://data.app.hasura.me/v1/query",
+          uri:"http://data.c100.hasura.me/v1/query",
           headers: {
             "Authorization": req.cookies.Authorization
           },
@@ -215,7 +215,7 @@ router.get('/search',function(req,res) {
   var usrname = req.query.username;
   var get_user_info = {
       method: 'POST',
-      uri: "http://data.app.hasura.me/v1/query",
+      uri: "http://data.c100.hasura.me/v1/query",
       //Add the Header entry with the bearer token
       headers: {
         "Authorization": req.cookies.Authorization
@@ -241,7 +241,7 @@ router.get('/search',function(req,res) {
     if(response.length){
     var follow_info = {
         method: 'POST',
-        uri: "http://data.app.hasura.me/v1/query",
+        uri: "http://data.c100.hasura.me/v1/query",
         //Add the Header entry with the bearer token
         headers: {
           "Authorization": req.cookies.Authorization
@@ -266,7 +266,7 @@ router.get('/search',function(req,res) {
           //user has some posts
           var ss_images_req = {
               method: 'POST',
-              uri:"http://data.app.hasura.me/v1/query",
+              uri:"http://data.c100.hasura.me/v1/query",
               headers: {
                 "Authorization": req.cookies.Authorization
               },
@@ -332,7 +332,7 @@ router.get('/logout',function(req,res,next){
   //Perform the logout request to auth endpoint and then set appt flags and then redirect
   var logout = {
       method: 'POST',
-      uri: "http://auth.app.hasura.me/user/logout",
+      uri: "http://auth.c100.hasura.me/user/logout",
       //Add the Header entry with the bearer token
       headers: {
         "Authorization": req.cookies.Authorization
@@ -364,7 +364,7 @@ function checkUserIdentity(authToken,from,callback) {
     var token = authToken.split(" ");
     var user_info = {
         method: 'GET',
-        uri: "http://auth.app.hasura.me/user/account/info",
+        uri: "http://auth.c100.hasura.me/user/account/info",
         //Add the Header entry with the bearer token
         headers: {
           "Authorization": authToken
