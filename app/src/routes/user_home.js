@@ -88,11 +88,39 @@ router.get('/', function(req, res, next) {
           else {
             //user has liked 0 pics
             console.log("User has liked 0 pics");
+            rp(imagefeed_data_req).then(function(response) {
+              console.log(response);
+              if(response.length){
+              response.forEach( function (image){
+                if(like_data.length > 0 && image.photo_id) {
+                  console.log("Matching image.id: " + image.photo_id + " in liked_data array");
+                  if(like_data.indexOf(image.photo_id) >= 0){
+                    image.liked = true;
+                  }
+                }
+                if(!image.no_likes){
+                  image.no_likes = 0;
+                }
+                if(!image.content){
+                  return;
+                }
+              imagefeed_data.push(image);
+              });
+              }
+              console.log("This is data being sent to the view ----")
+              console.log(imagefeed_data);
+              res.render('dashboard',{logged_in: true, active_home: true, image_data: imagefeed_data});
+
+            }).
+            catch(function (err) {
+              console.log(err);
+            });
+
           }
         })
         .catch(function(err) {
           console.log(err);
-        })
+        });
 
     }// end - else if statement(authenticated user)
   }); // end - checkUserIdentity()

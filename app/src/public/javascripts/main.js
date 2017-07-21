@@ -207,7 +207,7 @@ $(document).ready(function(){
           console.log(err);
         },
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             notif("info","You are now following this user,page will refresh shortly!","glyphicon glyphicon-ok");
             setTimeout(function() {
               location.reload();
@@ -239,7 +239,7 @@ $(document).ready(function(){
            console.log(err);
          },
          success: function (data) {
-             console.log(data);
+             //console.log(data);
              notif("warning","You have unfollowed this user,page will refresh shortly!","glyphicon glyphicon-ok");
              setTimeout(function() {
                location.reload();
@@ -282,7 +282,7 @@ $(document).ready(function(){
               console.log(err);
             },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 notif("warning","You have unliked this photo!","glyphicon glyphicon-asterisk");
                 //change button text
                 button_context.parent().parent().find('.like_badge').text(lk_count-1);
@@ -326,7 +326,7 @@ $(document).ready(function(){
               console.log(err);
             },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 notif("info","You have liked this photo","glyphicon glyphicon-ok");
                 //change btn text and color and increase likes badge
                 button_context.parent().parent().find('.like_badge').text(lk_count+1);
@@ -348,8 +348,6 @@ $(document).ready(function(){
   var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
   return v.toString(16);
   }));
-
-  console.log(guid());
 
   // Feed image upload
   $("#feed_pic_browse_btn").on('click', function(){
@@ -375,7 +373,7 @@ $(document).ready(function(){
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
      if (this.readyState == 4 && this.status == 200) {
-         console.log("Response from XMLHttp: " + this.responseText);
+         //console.log("Response from XMLHttp: " + this.responseText);
          //another request to store fileid in photos table
          $.ajax({
             type: "POST",
@@ -401,8 +399,8 @@ $(document).ready(function(){
               console.log(err);
             },
             success: function (data) {
-                console.log("Success response from $.ajax!!");
-                console.log(data);
+                //console.log("Success response from $.ajax!!");
+                //console.log(data);
                 $("#upload_modal").modal('hide');
                 notif("success","Image succesfully uploaded. Page will refresh shortly","glyphicon glyphicon-ok");
                 setTimeout(function() {
@@ -446,7 +444,7 @@ $(document).ready(function(){
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        console.log("Response from XMLHttp: " + this.responseText);
+        //console.log("Response from XMLHttp: " + this.responseText);
         //another request to store fileid in app_user table
         $.ajax({
            type: "POST",
@@ -469,8 +467,8 @@ $(document).ready(function(){
              console.log(err);
            },
            success: function (data) {
-               console.log("Success response from $.ajax!!");
-               console.log(data);
+               //console.log("Success response from $.ajax!!");
+               //console.log(data);
                notif("success","Image succesfully uploaded. Page will refresh shortly","glyphicon glyphicon-ok");
                setTimeout(function() {
                  location.reload();
