@@ -144,7 +144,7 @@ $(document).ready(function(){
          //e.stopPropagation();
          $.ajax({
             type: "POST",
-            url: "http://data.c100.hasura.me/v1/query",
+            url: "http://data.app.hasura.me/v1/query",
             cache: false,
             crossDomain: true,
             headers: { 'Content-Type' : 'application/json',
@@ -186,7 +186,7 @@ $(document).ready(function(){
      var ssusrid = $(this).data('usrsid');
      $.ajax({
         type: "POST",
-        url: "http://data.c100.hasura.me/v1/query",
+        url: "http://data.app.hasura.me/v1/query",
         cache: false,
         crossDomain: true,
         headers: { 'Content-Type' : 'application/json',
@@ -221,7 +221,7 @@ $(document).ready(function(){
       var followingid = $(this).data('usrsid');
       $.ajax({
          type: "POST",
-         url: "http://data.c100.hasura.me/v1/query",
+         url: "http://data.app.hasura.me/v1/query",
          cache: false,
          crossDomain: true,
          headers: { 'Content-Type' : 'application/json',
@@ -264,7 +264,7 @@ $(document).ready(function(){
          //photo is liked already
          $.ajax({
             type: "POST",
-            url: "http://data.c100.hasura.me/v1/query",
+            url: "http://data.app.hasura.me/v1/query",
             cache: false,
             crossDomain: true,
             headers: { 'Content-Type' : 'application/json',
@@ -305,7 +305,7 @@ $(document).ready(function(){
          //var like_count = $(this).data('likes');
          $.ajax({
             type: "POST",
-            url: "http://data.c100.hasura.me/v1/query",
+            url: "http://data.app.hasura.me/v1/query",
             cache: false,
             crossDomain: true,
             headers: { 'Content-Type' : 'application/json',
@@ -369,7 +369,7 @@ $(document).ready(function(){
     }
     var tokval = token.split(" ");
     var upfileid = guid();
-    var filestore_urll = "http://filestore.c100.hasura.me/v1/file/" + upfileid;
+    var filestore_urll = "http://filestore.app.hasura.me/v1/file/" + upfileid;
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
      if (this.readyState == 4 && this.status == 200) {
@@ -377,7 +377,7 @@ $(document).ready(function(){
          //another request to store fileid in photos table
          $.ajax({
             type: "POST",
-            url: "http://data.c100.hasura.me/v1/query",
+            url: "http://data.app.hasura.me/v1/query",
             cache: false,
             crossDomain: true,
             headers: { 'Content-Type' : 'application/json',
@@ -440,7 +440,7 @@ $(document).ready(function(){
    var tok = token.split(" ");
    var fileid = guid();
    //console.log("This is info about selected file.files[0]: " + selected_file.files[0]);
-   var filestore_url = "http://filestore.c100.hasura.me/v1/file/" + fileid;
+   var filestore_url = "http://filestore.app.hasura.me/v1/file/" + fileid;
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -448,7 +448,7 @@ $(document).ready(function(){
         //another request to store fileid in app_user table
         $.ajax({
            type: "POST",
-           url: "http://data.c100.hasura.me/v1/query",
+           url: "http://data.app.hasura.me/v1/query",
            cache: false,
            crossDomain: true,
            headers: { 'Content-Type' : 'application/json',

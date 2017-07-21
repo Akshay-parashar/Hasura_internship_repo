@@ -5,9 +5,9 @@
       <div class="row">
         <div class="col-lg-3 col-md-3 padding">
           {{#if user_stats.profile_image_link}}
-          <img src="http://filestore.c100.hasura.me/v1/file/{{user_stats.profile_image_link}}" class="profile_img">
+          <img src="http://filestore.app.hasura.me/v1/file/{{user_stats.profile_image_link}}" class="profile_img">
           {{else}}
-          <img src="http://filestore.c100.hasura.me/v1/file/e0dc9972-2058-4c52-9d32-ca6d449d3a8a" class="profile_img">
+          <img src="http://filestore.app.hasura.me/v1/file/e0dc9972-2058-4c52-9d32-ca6d449d3a8a" class="profile_img">
           {{/if}}
             <div class=" prof_img_btn_div">
               <input type="file" name="img[]" id="profile_file" accept="image/*">
@@ -68,7 +68,7 @@
       {{#if images}}
         {{#each images}}
           <div class="user_post col-lg-4 col-md-4">
-              <img src="http://filestore.c100.hasura.me/v1/file/{{this.content}}" class="img-responsive feed_img"
+              <img src="http://filestore.app.hasura.me/v1/file/{{this.content}}" class="img-responsive feed_img"
               data-toggle="modal" data-target="#myModal" data-photoid={{this.id}} data-likes={{this.no_likes}} >
           </div>
         {{/each}}
