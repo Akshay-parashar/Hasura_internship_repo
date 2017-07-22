@@ -357,13 +357,13 @@ $(document).ready(function(){
 
   $('#up_file').on('change',function() {
     var curr_file = $('#up_file')[0].files[0];
+    $(".feed_file_br_text").text("Change");
+    $('.feed_sel_fname').val($(this).val().replace(/C:\\fakepath\\/i, ''));
     if(curr_file.size > 999999){
-      notif("danger","Please select image of less than 1mb in size","glyphicon glyphicon-remove");
+      notif("danger","Please select image of less than 1mb in size","glyphicon glyphicon-remove","bottom","animated bounceInRight","animated bounceOutRight");
       return;
     }
     else{
-      $(".feed_file_br_text").text("Change");
-      $('.feed_sel_fname').val($(this).val().replace(/C:\\fakepath\\/i, ''));
       notif("info","Image Selected","glyphicon glyphicon-ok","bottom","animated bounceInRight","animated bounceOutRight");
     }
   });
@@ -436,13 +436,13 @@ $(document).ready(function(){
 
   $(document).on('change', '#profile_file', function(){
     var current_file = $('#profile_file')[0].files[0];
+    $(this).parent().find('.br_btn_text').text("Change");
+    $(this).parent().parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
     if(current_file.size > 999999){
       notif("danger","Please select image of less than 1mb in size","glyphicon glyphicon-remove");
       return;
     }
     else{
-      $(this).parent().find('.br_btn_text').text("Change");
-      $(this).parent().parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
       notif("info","Image Selected","glyphicon glyphicon-ok");
     }
   });
