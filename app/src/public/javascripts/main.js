@@ -382,6 +382,7 @@ $(document).ready(function(){
     var upfileid = guid();
     var filestore_urll = "http://filestore.app.hasura.me/v1/file/" + upfileid;
     var req = new XMLHttpRequest();
+    $("#upload_modal").modal('hide');
     req.onreadystatechange = function() {
      if (this.readyState == 4 && this.status == 200) {
          //console.log("Response from XMLHttp: " + this.responseText);
@@ -412,7 +413,6 @@ $(document).ready(function(){
             success: function (data) {
                 //console.log("Success response from $.ajax!!");
                 //console.log(data);
-                $("#upload_modal").modal('hide');
                 notif("success","Image succesfully uploaded. Page will refresh shortly","glyphicon glyphicon-ok");
                 setTimeout(function() {
                   location.reload();
