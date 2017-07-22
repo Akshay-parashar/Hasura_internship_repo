@@ -370,12 +370,12 @@ $(document).ready(function(){
 
   $("#feed_file_upload_btn").click(function() {
     var selected_image = $('#up_file')[0].files[0];
-    if(selected_image.size > 999999) {
-      notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove");
-      return;
-    }
     if(!selected_image) {
       notif("danger","Please select an image to upload","glyphicon glyphicon-remove","bottom","animated bounceInRight","animated bounceOutRight");
+      return;
+    }
+    if(selected_image.size > 999999) {
+      notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove","bottom","animated bounceInRight","animated bounceOutRight");
       return;
     }
     var tokval = token.split(" ");
@@ -451,12 +451,12 @@ $(document).ready(function(){
   $(document).on('click', '.upload', function(){
    //$(this).parent().parent().find('.form-control').val("Upload Profile Image", "");
    var selected_file = $('#profile_file')[0].files[0];
-   if(selected_file.size > 999999) {
-     notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove");
-     return;
-   }
    if(!selected_file) {
      notif("danger","Please select an image to upload","glyphicon glyphicon-remove");
+     return;
+   }
+   if(selected_file.size > 999999) {
+     notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove");
      return;
    }
    var tok = token.split(" ");
