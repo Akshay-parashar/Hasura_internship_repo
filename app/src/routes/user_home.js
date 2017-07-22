@@ -210,119 +210,129 @@ router.get('/profile',function(req,res) {
 })
 
 router.get('/search',function(req,res) {
-  var ss_usr_id;
-  var ss_prof_data;
-  var usrname = req.query.username;
-  var get_user_info = {
-      method: 'POST',
-      uri: "http://data.app.hasura.me/v1/query",
-      //Add the Header entry with the bearer token
-      headers: {
-        "Authorization": req.cookies.Authorization
-      },
-      body: {
-        type: "select",
-        args: {
-          table: "user_stats",
-          columns: ["*"],
-          where: {username: usrname }
-        }
-      },
-      json: true // Automatically stringifies the body to JSON
-  }
 
-  if(usrname == req.cookies.userName) {
-    res.redirect('profile');
-  }
-
-  else {
-  rp(get_user_info).then(function(response){
-    ss_prof_data = response[0];
-    if(response.length){
-    var follow_info = {
-        method: 'POST',
-        uri: "http://data.app.hasura.me/v1/query",
-        //Add the Header entry with the bearer token
-        headers: {
-          "Authorization": req.cookies.Authorization
-        },
-        body: {
-          type: "select",
-          args: {
-            table: "following_info",
-            columns: ["*"],
-            where: {user_id: req.cookies.userId , following_id: ss_prof_data.id}
-          }
-        },
-        json: true // Automatically stringifies the body to JSON
+  checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
+    if(identity == "anon user" || identity == "user token expired") {
+        res.redirect('../');
     }
-    //make another request to find if the user already follows this user or not
-    rp(follow_info).then(function(resp){
-      if(resp.length == 1) {
-        ss_prof_data.follows = true
-        var ss_img_data = [];
-        //This user follows searched user show this user his images
-        if(ss_prof_data.posts) {
-          //user has some posts
-          var ss_images_req = {
-              method: 'POST',
-              uri:"http://data.app.hasura.me/v1/query",
-              headers: {
-                "Authorization": req.cookies.Authorization
-              },
-              body: {
-                type: "select",
-                args: {
-                  table: "photo",
-                  columns: ["id","content"],
-                  where: {poster_id: ss_prof_data.id }
-                }
-              },
-              json: true
-          };
-
-          rp(ss_images_req).then(function(response){
-            console.log("This is image response for searched user");
-            response.forEach(function(susrimg){
-              ss_img_data.push(susrimg);
-            });
-            console.log(ss_img_data);
-            res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, ss_images: ss_img_data});
-          })
-          .catch(function(err){
-            console.log(err);
-          });
-        }
-        else{
-          res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, no_images: true});
-        }
-
+    else if(identity == "authenticated user") {
+      var ss_usr_id;
+      var ss_prof_data;
+      var usrname = req.query.username;
+      var get_user_info = {
+          method: 'POST',
+          uri: "http://data.app.hasura.me/v1/query",
+          //Add the Header entry with the bearer token
+          headers: {
+            "Authorization": req.cookies.Authorization
+          },
+          body: {
+            type: "select",
+            args: {
+              table: "user_stats",
+              columns: ["*"],
+              where: {username: usrname }
+            }
+          },
+          json: true // Automatically stringifies the body to JSON
       }
+
+      if(usrname == req.cookies.userName) {
+        res.redirect('profile');
+      }
+
       else {
-        ss_prof_data.follows = false;
-        res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, no_follow: true});
-      }
-    })
-      .catch(function(err) {
-          console.log("Error for follow-info----------------------------------");
+      rp(get_user_info).then(function(response){
+        ss_prof_data = response[0];
+        if(response.length){
+        var follow_info = {
+            method: 'POST',
+            uri: "http://data.app.hasura.me/v1/query",
+            //Add the Header entry with the bearer token
+            headers: {
+              "Authorization": req.cookies.Authorization
+            },
+            body: {
+              type: "select",
+              args: {
+                table: "following_info",
+                columns: ["*"],
+                where: {user_id: req.cookies.userId , following_id: ss_prof_data.id}
+              }
+            },
+            json: true // Automatically stringifies the body to JSON
+        }
+        //make another request to find if the user already follows this user or not
+        rp(follow_info).then(function(resp){
+          if(resp.length == 1) {
+            ss_prof_data.follows = true
+            var ss_img_data = [];
+            //This user follows searched user show this user his images
+            if(ss_prof_data.posts) {
+              //user has some posts
+              var ss_images_req = {
+                  method: 'POST',
+                  uri:"http://data.app.hasura.me/v1/query",
+                  headers: {
+                    "Authorization": req.cookies.Authorization
+                  },
+                  body: {
+                    type: "select",
+                    args: {
+                      table: "photo",
+                      columns: ["id","content"],
+                      where: {poster_id: ss_prof_data.id }
+                    }
+                  },
+                  json: true
+              };
+
+              rp(ss_images_req).then(function(response){
+                console.log("This is image response for searched user");
+                response.forEach(function(susrimg){
+                  ss_img_data.push(susrimg);
+                });
+                console.log(ss_img_data);
+                res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, ss_images: ss_img_data});
+              })
+              .catch(function(err){
+                console.log(err);
+              });
+            }
+            else{
+              res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, no_images: true});
+            }
+
+          }
+          else {
+            ss_prof_data.follows = false;
+            res.render('ss_user_prof',{logged_in: true, data: ss_prof_data, no_follow: true});
+          }
+        })
+          .catch(function(err) {
+              console.log("Error for follow-info----------------------------------");
+              console.log(err);
+          });
+        } //end if(response.length)
+        else {
+          //No user found with the given username
+          res.cookie("searchUserNotFound",true);
+          res.redirect('back');
+        }
+
+        })
+        .catch(function(err) {
+          console.log("Error for get-user-stats----------------------------------");
           console.log(err);
-      });
-    } //end if(response.length)
-    else {
-      //No user found with the given username
-      res.cookie("searchUserNotFound",true);
-      res.redirect('back');
-    }
+        });
 
-    })
-    .catch(function(err) {
-      console.log("Error for get-user-stats----------------------------------");
-      console.log(err);
-    });
+      } //end else
 
-  } //end else
+    } //end authenticated user
+  }); //end checkUserIdentity 
 
-});
+
+}); //end /search route
 
 // router.get('/dashboard', function(req, res, next) {
 //   res.send("Hello User, this your personal dashboard");
