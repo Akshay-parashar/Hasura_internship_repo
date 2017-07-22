@@ -142,6 +142,7 @@ a {
 
 .search_btn:hover{
   background: #004C4C;
+  border-color: #004C4C;
 }
 
 .se_inp {
