@@ -189,6 +189,7 @@ $(document).ready(function(){
 
    //Follow button
    $("#follow_btn").on('click',function(){
+     $(this).prop('disabled',true);
      var ssusrid = $(this).data('usrsid');
      $.ajax({
         type: "POST",
@@ -224,6 +225,7 @@ $(document).ready(function(){
 
     //Following button
     $("#following_btn").on('click',function(){
+      $(this).prop('disabled',true);
       var followingid = $(this).data('usrsid');
       $.ajax({
          type: "POST",
@@ -384,6 +386,7 @@ $(document).ready(function(){
       notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove","bottom","animated bounceInRight","animated bounceOutRight");
       return;
     }
+    $(this).prop('disabled',true);
     var tokval = token.split(" ");
     var upfileid = guid();
     var filestore_urll = "http://filestore.app.hasura.me/v1/file/" + upfileid;
@@ -465,6 +468,7 @@ $(document).ready(function(){
      notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove");
      return;
    }
+   $(this).prop('disabled',true);
    var tok = token.split(" ");
    var fileid = guid();
    //console.log("This is info about selected file.files[0]: " + selected_file.files[0]);
