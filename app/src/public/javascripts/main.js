@@ -301,7 +301,7 @@ $(document).ready(function(){
                 button_context.data('liked',false);
                 button_context.data('likes',lk_count-1);
                 lk_count = lk_count -1;
-                $(this).prop('disabled',false);
+                button_context.prop('disabled',false);
               }
           });
        } // end if
@@ -346,7 +346,7 @@ $(document).ready(function(){
                 button_context.data('liked',true);
                 button_context.data('likes',lk_count+1);
                 lk_count = lk_count + 1;
-                $(this).prop('disabled',false);
+                button_context.prop('disabled',false);
               }
           }); //end ajax */
 
