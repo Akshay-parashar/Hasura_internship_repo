@@ -135,7 +135,22 @@ a {
 }
 
 .search_btn {
-  background: #15A589;
+  background: #008080;
+  border-color: transparent;
+  border-radius: 23px;
+}
+
+.search_btn:hover{
+  background: #004C4C;
+}
+
+.se_inp {
+  border-radius: 23px;
+  border-color: #008080;
+}
+
+.se_inp:focus {
+  border-color: #008080;
 }
 
 .padding{
