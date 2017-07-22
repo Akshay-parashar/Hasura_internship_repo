@@ -263,6 +263,7 @@ $(document).ready(function(){
        var pid = $(this).data('photoid');
        var button_context = $(this);
        var lk_count = $(this).data('likes');
+       $(this).prop('disabled',true);
 
        if(isLiked){
          /*console.log("This is value of current likes: " + ($(this).data('likes')));
@@ -300,6 +301,7 @@ $(document).ready(function(){
                 button_context.data('liked',false);
                 button_context.data('likes',lk_count-1);
                 lk_count = lk_count -1;
+                $(this).prop('disabled',false);
               }
           });
        } // end if
@@ -344,6 +346,7 @@ $(document).ready(function(){
                 button_context.data('liked',true);
                 button_context.data('likes',lk_count+1);
                 lk_count = lk_count + 1;
+                $(this).prop('disabled',false);
               }
           }); //end ajax */
 
