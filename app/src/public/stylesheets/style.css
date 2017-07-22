@@ -8,6 +8,10 @@ a {
   color: #00B7FF;
 }
 
+.mt_105 {
+  margin-top: 105px;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;
@@ -93,6 +97,14 @@ a {
   padding-bottom: 10px;
   padding-top: 10px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.ab_head {
+  font-size: 50px;
+}
+
+.ab_lead {
+  font-size: 32.5px;
 }
 
 .home-container {
