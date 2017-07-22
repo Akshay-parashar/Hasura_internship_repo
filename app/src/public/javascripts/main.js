@@ -356,13 +356,24 @@ $(document).ready(function(){
   });
 
   $('#up_file').on('change',function() {
-    $(".feed_file_br_text").text("Change");
-    $('.feed_sel_fname').val($(this).val().replace(/C:\\fakepath\\/i, ''));
-    notif("info","Image Selected","glyphicon glyphicon-ok","bottom","animated bounceInRight","animated bounceOutRight");
+    var curr_file = $('#up_file')[0].files[0];
+    if(curr_file.size > 999999){
+      notif("danger","Please select image of less than 1mb in size","glyphicon glyphicon-remove");
+      return;
+    }
+    else{
+      $(".feed_file_br_text").text("Change");
+      $('.feed_sel_fname').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+      notif("info","Image Selected","glyphicon glyphicon-ok","bottom","animated bounceInRight","animated bounceOutRight");
+    }
   });
 
   $("#feed_file_upload_btn").click(function() {
     var selected_image = $('#up_file')[0].files[0];
+    if(selected_image.size > 999999) {
+      notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove");
+      return;
+    }
     if(!selected_image) {
       notif("danger","Please select an image to upload","glyphicon glyphicon-remove","bottom","animated bounceInRight","animated bounceOutRight");
       return;
@@ -424,15 +435,26 @@ $(document).ready(function(){
   });
 
   $(document).on('change', '#profile_file', function(){
-    $(this).parent().find('.br_btn_text').text("Change");
-    $(this).parent().parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
-    notif("info","Image Selected","glyphicon glyphicon-ok");
+    var current_file = $('#profile_file')[0].files[0];
+    if(current_file.size > 999999){
+      notif("danger","Please select image of less than 1mb in size","glyphicon glyphicon-remove");
+      return;
+    }
+    else{
+      $(this).parent().find('.br_btn_text').text("Change");
+      $(this).parent().parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+      notif("info","Image Selected","glyphicon glyphicon-ok");
+    }
   });
 
 
   $(document).on('click', '.upload', function(){
    //$(this).parent().parent().find('.form-control').val("Upload Profile Image", "");
    var selected_file = $('#profile_file')[0].files[0];
+   if(selected_file.size > 999999) {
+     notif("danger","Image too big for upload,please select image of less than 1mb in size","glyphicon glyphicon-remove");
+     return;
+   }
    if(!selected_file) {
      notif("danger","Please select an image to upload","glyphicon glyphicon-remove");
      return;
