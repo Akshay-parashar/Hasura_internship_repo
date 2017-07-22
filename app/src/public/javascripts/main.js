@@ -48,6 +48,12 @@ $(document).ready(function(){
     });
   }
 
+  //restrict spaces in input in register form for username and password
+  $('.rest_space').on('keypress',function(e) {
+    if(e.which == 32)
+    return false;
+  })
+
   //Current userid and auth token
   var userId = getCookie("userId");
   var token = getCookie("Authorization");
