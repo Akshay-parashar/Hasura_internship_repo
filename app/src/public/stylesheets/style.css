@@ -150,8 +150,9 @@ a {
   border-color: #008080;
 }
 
-.se_inp:focus {
-  border-color: #008080;
+.se_inp:focus,.se_inp:active {
+  color: #18E5D6;
+  border-color: #18E5D6;
 }
 
 .padding{

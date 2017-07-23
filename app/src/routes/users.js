@@ -90,6 +90,10 @@ router.post('/register',function(req,res,next){
           res.render('register',{active_register: true, errors: errors });
       }
      else {
+          var persistent_data = {};
+          persistent_data.name = name;
+          persistent_data.email = email;
+          persistent_data.username = username;
           console.log("no errors :)");
           console.log("making request to auth endpoint-------------------------------------")
           //Send an api call to hasura auth and then redirect
@@ -158,18 +162,18 @@ router.post('/register',function(req,res,next){
                   var error_mess = err.error.message;
                   if(error_code == 400) {
                     //Fix for password too short
-                    res.render('register',{active_register: true, pass_err: error_mess });
+                    res.render('register',{active_register: true, pass_err: error_mess  });
                   }
                   else if(error_code == 409) {
                     //Fix for username or email clash
                     if(error_mess.indexOf('username') >= 0){
                       //username is clashing
                       var usrnme_err = "User name already exists"
-                      res.render('register',{active_register: true, username_err: usrnme_err });
+                      res.render('register',{active_register: true, username_err: usrnme_err , data: persistent_data});
                     }
                     else{
                       var mail_err = "This email is already registered"
-                      res.render('register',{active_register: true, email_err: mail_err });
+                      res.render('register',{active_register: true, email_err: mail_err , data: persistent_data});
                     }
                   }
 
