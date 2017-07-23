@@ -73,6 +73,10 @@ router.post('/register',function(req,res,next){
   var email = req.body.email;
   var password = req.body.user_password;
   var password2 = req.body.confirm_password;
+  var persistent_data = {};
+  persistent_data.name = name;
+  persistent_data.email = email;
+  persistent_data.username = username;
 
   req.checkBody('name','Name is required').notEmpty();
   req.checkBody('email','Email is required').notEmpty()
@@ -87,13 +91,9 @@ router.post('/register',function(req,res,next){
           console.log(result.isEmpty());
           var errors = result.mapped();
           result = {};
-          res.render('register',{active_register: true, errors: errors });
+          res.render('register',{active_register: true, errors: errors , data: persistent_data});
       }
      else {
-          var persistent_data = {};
-          persistent_data.name = name;
-          persistent_data.email = email;
-          persistent_data.username = username;
           console.log("no errors :)");
           console.log("making request to auth endpoint-------------------------------------")
           //Send an api call to hasura auth and then redirect
