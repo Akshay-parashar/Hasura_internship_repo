@@ -144,7 +144,7 @@ router.get('/profile/following_list',function(req,res) {
           body: {
             type: "select",
             args: {
-              table: "following_info_updated",
+              table: "following_info_new",
               columns: ["*"],
               where: {user_id: req.cookies.userId }
             }
