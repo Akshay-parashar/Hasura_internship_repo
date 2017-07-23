@@ -61,7 +61,7 @@ router.post('/login',function(req,res,next) {
     //login not successfull
       if(err.statusCode == 403){
           var cred_error = "Incorrect credentials. Please Try again."
-         res.render('login',{active_login: true , error: cred_error });
+         res.render('login',{active_login: true , error: cred_error , persisted_username: username });
       }
   });
 
