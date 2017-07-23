@@ -1,0 +1,23 @@
+<div class="container">
+
+  {{#if followings}}
+  <div class="starter-template well">
+    <h1>Followings</h1>
+    <div class="row">
+      {{#each followings}}
+        <div class="col-lg-8 col-md-10 col-sm-12">
+          <a href="/search?username={{this.following_username}}"><h3>{{this.following_username}}</h3></a>
+        </div>
+      {{/each}}
+    <div>
+
+  </div>
+  {{/if}}
+
+  {{#if no_followings}}
+  <div class="starter-template">
+    <h1 class="ab_head">Your are not following anyone</h1>
+  </div>
+  {{/if}}
+
+</div>

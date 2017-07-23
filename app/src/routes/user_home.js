@@ -126,6 +126,56 @@ router.get('/', function(req, res, next) {
   }); // end - checkUserIdentity()
 }); // end - route
 
+//Following list
+router.get('/profile/following_list',function(req,res) {
+  checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
+    if(identity == "anon user" || identity == "user token expired") {
+        res.redirect('../');
+    }
+    else if(identity == "authenticated user") {
+      //Make a req to the following of this user
+      var following_list = [];
+      var following_list_req = {
+          method: 'POST',
+          uri:"http://data.app.hasura.me/v1/query",
+          headers: {
+            "Authorization": req.cookies.Authorization
+          },
+          body: {
+            type: "select",
+            args: {
+              table: "following_info",
+              columns: ["*"],
+              where: {user_id: req.cookies.userId }
+            }
+          },
+          json: true
+      }
+
+      rp(following_list_req).then(function(response){
+        if(response.length == 0){
+          //this user is not following any user,render a view that tells the user.
+          res.render('following_page',{logged_in: true, no_followings: true});
+        }
+        else {
+          response.forEach(function(usr){
+            following_list.push(usr);
+          });
+          //render the view and pass this data
+          res.render('following_page',{logged_in: true, followings: following_list});
+        }
+
+      }) //end then
+      .catch(function(err) {
+        console.log(err);
+      }); //end catch
+
+
+    } // end else if
+
+}); // end route /profile/following_list
+
+
 router.get('/profile',function(req,res) {
   //Role based access on the view
   checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
@@ -207,7 +257,7 @@ router.get('/profile',function(req,res) {
     }
   });
 
-})
+});
 
 router.get('/search',function(req,res) {
 
@@ -329,14 +379,11 @@ router.get('/search',function(req,res) {
       } //end else
 
     } //end authenticated user
-  }); //end checkUserIdentity 
+  }); //end checkUserIdentity
 
 
 }); //end /search route
 
-// router.get('/dashboard', function(req, res, next) {
-//   res.send("Hello User, this your personal dashboard");
-// });
 
 router.get('/logout',function(req,res,next){
   //Perform the logout request to auth endpoint and then set appt flags and then redirect

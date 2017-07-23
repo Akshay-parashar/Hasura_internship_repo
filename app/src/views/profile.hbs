@@ -52,10 +52,14 @@
           <h3>Posts: {{user_stats.posts}} <span class="{{#if user_stats.posts}}hide{{/if}}"> 0</span></h3>
         </div>
         <div class="col-lg-4 col-md-4">
-          <h3>Followers: {{user_stats.follower_count}} <span class="{{#if user_stats.follower_count}}hide{{/if}}"> 0</span></h3>
+          <a href="/following_list">
+            <h3>Followers: {{user_stats.follower_count}} <span class="{{#if user_stats.follower_count}}hide{{/if}}"> 0</span></h3>
+          </a>
         </div>
         <div class="col-lg-4 col-md-4">
-          <h3>Following: {{user_stats.following_count}} <span class="{{#if user_stats.following_count}}hide{{/if}}"> 0</span></h3>
+          <a href="/follower_list">
+            <h3>Following: {{user_stats.following_count}} <span class="{{#if user_stats.following_count}}hide{{/if}}"> 0</span></h3>
+          </a>
         </div>
       </div>
     </div>
