@@ -172,6 +172,7 @@ router.get('/profile/following_list',function(req,res) {
 
 
     } // end else if
+  }); //end checkUserIdentity
 
 }); // end route /profile/following_list
 
