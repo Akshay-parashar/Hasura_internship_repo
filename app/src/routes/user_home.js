@@ -177,6 +177,57 @@ router.get('/profile/following_list',function(req,res) {
 }); // end route /profile/following_list
 
 
+//Follower list
+router.get('/profile/follower_list',function(req,res) {
+  checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
+    if(identity == "anon user" || identity == "user token expired") {
+        res.redirect('../');
+    }
+    else if(identity == "authenticated user") {
+      //Make a req to the following of this user
+      var follower_list = [];
+      var follower_list_req = {
+          method: 'POST',
+          uri:"http://data.app.hasura.me/v1/query",
+          headers: {
+            "Authorization": req.cookies.Authorization
+          },
+          body: {
+            type: "select",
+            args: {
+              table: "follower_info",
+              columns: ["*"],
+              where: {following_id: req.cookies.userId }
+            }
+          },
+          json: true
+      }
+
+      rp(follower_list_req).then(function(response){
+        if(response.length == 0){
+          //this user is not following any user,render a view that tells the user.
+          res.render('follower_page',{logged_in: true, no_followers: true});
+        }
+        else {
+          response.forEach(function(usr){
+            follower_list.push(usr);
+          });
+          //render the view and pass this data
+          res.render('follower_page',{logged_in: true, followers: follower_list});
+        }
+
+      }) //end then
+      .catch(function(err) {
+        console.log(err);
+      }); //end catch
+
+
+    } // end else if
+  }); //end checkUserIdentity
+
+}); // end route /profile/follower_list
+
+
 router.get('/profile',function(req,res) {
   //Role based access on the view
   checkUserIdentity(req.cookies.Authorization,"profile ",function(identity){
